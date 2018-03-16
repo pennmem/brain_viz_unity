@@ -5,13 +5,15 @@ using UnityExtension;
 
 public class ObjSpawner : MonoBehaviour
 {
+	public GameObject dkParent;
+	public GameObject hcpParent;
 	public GameObject baseObject;
 	public string pathToFolderWithObjs;
 	public Material brainMaterial;
 
 	public MonoBehaviour[] enableWhenFinished;
 
-	IEnumerator Start ()
+	void Start ()
 	{
 		string[] filesInFolder = System.IO.Directory.GetFiles(pathToFolderWithObjs);
 		List<GameObject> loadedObjs = new List<GameObject> ();
@@ -21,15 +23,14 @@ public class ObjSpawner : MonoBehaviour
 			if (System.IO.Path.GetExtension (filePath).Equals (".obj"))
 			{
 				string fileName = System.IO.Path.GetFileName (filePath);
-				if (fileName.Contains ("hcp") || fileName.Contains("pial"))
+				if (fileName.Contains("pial"))
 					continue;
-				//Debug.Log (fileName);
 
 				GameObject targetObject = Instantiate<GameObject>(baseObject);
 				targetObject.name = fileName;
 				loadedObjs.Add (targetObject);
 
-				//	Load the OBJ in
+				//	Load the .obj using the OBJ-IO asset
 				System.IO.Stream lStream = new System.IO.FileStream(filePath, System.IO.FileMode.Open);
 				OBJData lOBJData = OBJLoader.LoadOBJ(lStream);
 				MeshFilter filter = targetObject.GetComponent<MeshFilter>();
@@ -46,9 +47,12 @@ public class ObjSpawner : MonoBehaviour
 				MeshRenderer meshRenderer = targetObject.GetComponent<MeshRenderer>();
 				meshRenderer.material = brainMaterial;
 
-				targetObject.transform.parent = gameObject.transform;
+				if (fileName.Contains ("hcp"))
+					targetObject.transform.parent = hcpParent.transform;
+				else
+					targetObject.transform.parent = dkParent.transform;
 
-				yield return null;
+				//yield return null;
 			}
 		}
 		Debug.Log ("Load finished");
