@@ -15,8 +15,10 @@ public class Spinner : MonoBehaviour
 	{
 		float ySpin = Input.GetAxis ("Horizontal") * keySpinFactor * Time.deltaTime;
 		float xSpin = Input.GetAxis ("Vertical") * keySpinFactor * Time.deltaTime;
+		float zSpin = Input.GetAxis ("Roll") * keySpinFactor * Time.deltaTime;
 		gameObject.transform.RotateAround (spinCenter, new Vector3 (0, 1, 0), ySpin);
 		gameObject.transform.RotateAround (spinCenter, new Vector3 (1, 0, 0), xSpin);
+		gameObject.transform.RotateAround (spinCenter, new Vector3 (0, 0, 1), zSpin);
 
 		if (Input.GetMouseButtonDown (0))
 			lastMousePos = Input.mousePosition;
