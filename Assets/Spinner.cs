@@ -6,13 +6,21 @@ public class Spinner : MonoBehaviour
 {
 
 	public Vector3 spinCenter;
-	public float spinFactor = 1f;
+	public float keySpinFactor = 30f;
+	public float mouseSpinFactor = 30f;
+
+	//private Vector2 lastMousePos = Vector2.zero;
 
 	void Update ()
 	{
-		float ySpin = Input.GetAxis ("Horizontal") * spinFactor * Time.deltaTime;
-		float xSpin = Input.GetAxis ("Vertical") * spinFactor * Time.deltaTime;
+		float ySpin = Input.GetAxis ("Horizontal") * keySpinFactor * Time.deltaTime;
+		float xSpin = Input.GetAxis ("Vertical") * keySpinFactor * Time.deltaTime;
 		gameObject.transform.RotateAround (spinCenter, new Vector3 (0, 1, 0), ySpin);
 		gameObject.transform.RotateAround (spinCenter, new Vector3 (1, 0, 0), xSpin);
+
+//		if (Input.GetMouseButton (0))
+//		{
+//			Vector2 newMousePos = Input.mousePosition;
+//		}
 	}
 }

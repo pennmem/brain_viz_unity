@@ -5,6 +5,7 @@ using UnityExtension;
 
 public class ObjSpawner : MonoBehaviour
 {
+	public GameObject baseObject;
 	public string pathToFolderWithObjs;
 	public Material brainMaterial;
 
@@ -22,14 +23,14 @@ public class ObjSpawner : MonoBehaviour
 					continue;
 				//Debug.Log (fileName);
 
-				GameObject targetObject = new GameObject ();
+				GameObject targetObject = Instantiate<GameObject>(baseObject);
 				targetObject.name = fileName;
 				loadedObjs.Add (targetObject);
 
 				//	Load the OBJ in
 				System.IO.Stream lStream = new System.IO.FileStream(filePath, System.IO.FileMode.Open);
 				OBJData lOBJData = OBJLoader.LoadOBJ(lStream);
-				MeshFilter filter = targetObject.AddComponent<MeshFilter>();
+				MeshFilter filter = targetObject.GetComponent<MeshFilter>();
 				filter.mesh.LoadOBJ(lOBJData);
 				lStream.Close();
 				lStream = null;
@@ -37,14 +38,15 @@ public class ObjSpawner : MonoBehaviour
 
 //				ObjImporter importer = new ObjImporter ();
 //				Mesh mesh = importer.ImportFile (filePath);
-//				MeshFilter filter = targetObject.AddComponent<MeshFilter> ();
+//				MeshFilter filter = targetObject.GetComponent<MeshFilter> ();
 //				filter.mesh = mesh;
 
 				filter.mesh.name = fileName;
+				targetObject.GetComponent<MeshCollider> ().sharedMesh = filter.mesh;
 				filter.mesh.RecalculateNormals ();
 				filter.mesh.RecalculateTangents ();
 				filter.mesh.RecalculateBounds ();
-				MeshRenderer meshRenderer = targetObject.AddComponent<MeshRenderer>();
+				MeshRenderer meshRenderer = targetObject.GetComponent<MeshRenderer>();
 				meshRenderer.material = brainMaterial;
 
 				targetObject.transform.parent = gameObject.transform;
