@@ -113,37 +113,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!84 &257636378
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 1532
-  m_Height: 728
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 0
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 0
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &433383707
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,7 +155,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 257636378}
+  m_TargetTexture: {fileID: 1843747917}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -332,8 +301,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 482234084}
   outlineCamera: {fileID: 433383708}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 257636378}
-  extraRenderTexture: {fileID: 2084796682}
+  renderTexture: {fileID: 1843747917}
+  extraRenderTexture: {fileID: 2117052487}
 --- !u!1 &815547546
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,6 +399,8 @@ MonoBehaviour:
   baseObject: {fileID: 1781606977884158, guid: 343b15da825f54093b5ec20639a806fe, type: 2}
   pathToFolderWithObjs: /Users/zduey/data/test_subject/brainviz/r1337e
   brainMaterial: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  enableWhenFinished:
+  - {fileID: 1057535550}
 --- !u!4 &1057535549
 Transform:
   m_ObjectHideFlags: 0
@@ -449,15 +420,46 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1057535547}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 775705067da4c4be7880c8eedd4d7409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spinCenter: {x: 0, y: -25, z: 0}
   keySpinFactor: 30
-  mouseSpinFactor: 30
---- !u!84 &2084796682
+  mouseSpinFactor: 10
+--- !u!84 &1843747917
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 1532
+  m_Height: 728
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 0
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+--- !u!84 &2117052487
 RenderTexture:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}

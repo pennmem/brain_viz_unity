@@ -9,6 +9,8 @@ public class ObjSpawner : MonoBehaviour
 	public string pathToFolderWithObjs;
 	public Material brainMaterial;
 
+	public MonoBehaviour[] enableWhenFinished;
+
 	IEnumerator Start ()
 	{
 		string[] filesInFolder = System.IO.Directory.GetFiles(pathToFolderWithObjs);
@@ -36,16 +38,11 @@ public class ObjSpawner : MonoBehaviour
 				lStream = null;
 				lOBJData = null;
 
-//				ObjImporter importer = new ObjImporter ();
-//				Mesh mesh = importer.ImportFile (filePath);
-//				MeshFilter filter = targetObject.GetComponent<MeshFilter> ();
-//				filter.mesh = mesh;
-
 				filter.mesh.name = fileName;
 				targetObject.GetComponent<MeshCollider> ().sharedMesh = filter.mesh;
 				filter.mesh.RecalculateNormals ();
-				filter.mesh.RecalculateTangents ();
-				filter.mesh.RecalculateBounds ();
+				//filter.mesh.RecalculateTangents ();
+				//filter.mesh.RecalculateBounds ();
 				MeshRenderer meshRenderer = targetObject.GetComponent<MeshRenderer>();
 				meshRenderer.material = brainMaterial;
 
@@ -55,6 +52,8 @@ public class ObjSpawner : MonoBehaviour
 			}
 		}
 		Debug.Log ("Load finished");
+		foreach (MonoBehaviour monoBehavior in enableWhenFinished)
+			monoBehavior.enabled = true;
 	}
 
 
