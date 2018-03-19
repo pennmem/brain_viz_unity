@@ -45,7 +45,7 @@ public class ObjSpawner : MonoBehaviour
 				//filter.mesh.RecalculateTangents ();
 				//filter.mesh.RecalculateBounds ();
 				MeshRenderer meshRenderer = targetObject.GetComponent<MeshRenderer>();
-				meshRenderer.material = brainMaterial;
+				meshRenderer.material = brainMaterial;	
 
 				if (fileName.Contains ("hcp"))
 					targetObject.transform.parent = hcpParent.transform;
