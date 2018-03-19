@@ -5,8 +5,10 @@ using UnityExtension;
 
 public class ObjSpawner : MonoBehaviour
 {
-	public GameObject dkParent;
-	public GameObject hcpParent;
+	public GameObject dkLeftParent;
+	public GameObject dkRightParent;
+	public GameObject hcpLeftParent;
+	public GameObject hcpRightParent;
 	public GameObject baseObject;
 	public string pathToFolderWithObjs;
 	public Material brainMaterial;
@@ -47,10 +49,16 @@ public class ObjSpawner : MonoBehaviour
 				MeshRenderer meshRenderer = targetObject.GetComponent<MeshRenderer>();
 				meshRenderer.material = brainMaterial;	
 
-				if (fileName.Contains ("hcp"))
-					targetObject.transform.parent = hcpParent.transform;
+				if (fileName.Contains ("hcp") && fileName.Contains ("lh"))
+					targetObject.transform.parent = hcpLeftParent.transform;
+				else if (fileName.Contains ("hcp") && fileName.Contains ("rh"))
+					targetObject.transform.parent = hcpRightParent.transform;
+				else if (fileName.Contains ("lh"))
+					targetObject.transform.parent = dkLeftParent.transform;
+				else if (fileName.Contains ("rh"))
+					targetObject.transform.parent = dkRightParent.transform;
 				else
-					targetObject.transform.parent = dkParent.transform;
+					throw new UnityException ("An obj with an unrecorgnized naming exists.");
 
 				//yield return null;
 			}
