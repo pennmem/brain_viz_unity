@@ -15,7 +15,7 @@ public class ObjSpawner : MonoBehaviour
 
 	public MonoBehaviour[] enableWhenFinished;
 
-	void Start ()
+	void Awake ()
 	{
 		string[] filesInFolder = System.IO.Directory.GetFiles(pathToFolderWithObjs);
 		List<GameObject> loadedObjs = new List<GameObject> ();

@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class MouseOverOutline : MonoBehaviour
 {
-	private cakeslice.Outline outline;
+	public cakeslice.Outline outline;
 
 	void Start()
 	{
-		outline = gameObject.GetComponent<cakeslice.Outline> ();
 		outline.enabled = false;
 	}
 
