@@ -86,6 +86,7 @@ public class ElectrodeSpawner : MonoBehaviour
 				//////these are micros
 				if (too_close.Count > MICRO_CLUSTER_THRESHHOLD)
 				{
+					orientMe.MarkMicro ();
 					micros.Add (orientMe.gameObject);
 				}
 			}

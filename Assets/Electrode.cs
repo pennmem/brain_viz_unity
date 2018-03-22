@@ -9,6 +9,7 @@ public class Electrode : BrainWorldMonobehavior
 	private string contact_type;
 	private string atlas;
 	private string orientTo;
+	private bool isMicro = false;
 
 	private const float POSITION_SCALING_FACTOR = 50f;
 
@@ -34,8 +35,18 @@ public class Electrode : BrainWorldMonobehavior
 		return orientTo;
 	}
 
+	public void MarkMicro()
+	{
+		isMicro = true;
+	}
+
 	protected override string InfoString ()
 	{
-		return "<b>Contact:</b> " + contact_name + "\n" + contact_type + ", " + atlas + " atlas"; 
+		string infoString = "<b>Contact:</b> " + contact_name + "\n" + contact_type + ", " + atlas + " atlas";
+		if (isMicro)
+		{
+			infoString = infoString + ". This is a micro contact.";
+		}
+		return infoString;
 	}
 }
