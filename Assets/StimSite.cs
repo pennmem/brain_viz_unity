@@ -13,6 +13,8 @@ public class StimSite : BrainWorldMonobehavior
 	public float negativeStimBlueThreshhold = -50f;
 	public float positiveStimRedThreshhold = 50f;
 
+	private const float MAGNITUDE_CUTOFF = 100f;
+
 	public void Initialize
 	(
 		string new_subject_id,
@@ -38,6 +40,14 @@ public class StimSite : BrainWorldMonobehavior
 			1 - Mathf.Max(Mathf.Clamp (deltarec, 0, positiveStimRedThreshhold) / positiveStimRedThreshhold, Mathf.Clamp (deltarec, negativeStimBlueThreshhold, 0) / negativeStimBlueThreshhold),
 			1 - Mathf.Clamp (deltarec, 0, positiveStimRedThreshhold) / positiveStimRedThreshhold
 		);
+
+		gameObject.name = subject_id + " " + experiment;
+
+		if (gameObject.transform.position.sqrMagnitude > MAGNITUDE_CUTOFF * MAGNITUDE_CUTOFF)
+		{
+			Debug.Log ("magnitude cutoff deactivated " + gameObject.name);
+			gameObject.SetActive (false);
+		}
 	}
 
 	protected override string InfoString()
