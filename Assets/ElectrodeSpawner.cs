@@ -10,6 +10,10 @@ public class ElectrodeSpawner : MonoBehaviour
 	private static Dictionary<string, GameObject> atlasParents = new Dictionary<string, GameObject> ();
 
 	private const float NEARBY_THRESHHOLD = 5f;
+	private const float TOO_CLOSE = 0.001f;
+	private const float MICRO_JITTER = 1f;
+	private const float MICRO_SHRINK = 0.3f;
+	private const int MICRO_CLUSTER_THRESHHOLD = 15;
 
 	void Awake ()
 	{
@@ -50,19 +54,47 @@ public class ElectrodeSpawner : MonoBehaviour
 				indicator.transform.parent = atlasParents[atlas].transform;
 			}
 
+			///////orientation and micro detection////////
+			List <GameObject> micros = new List<GameObject>();
 			foreach (Electrode orientMe in electrodes.Values)
 			{
+				List<Collider> nearbies = new List<Collider>(Physics.OverlapSphere (orientMe.transform.position, NEARBY_THRESHHOLD));
+				List<Collider> too_close = new List<Collider>(Physics.OverlapSphere(orientMe.transform.position, TOO_CLOSE));
+				List<Collider> remove_us = new List<Collider> ();
+				foreach (Collider too_close_colider in too_close)
+					remove_us.Add (too_close_colider);
+				foreach (Collider nearbie in nearbies)
+				{
+					if (!nearbie.tag.Equals ("electrode"))
+						remove_us.Add (nearbie);
+				}
+				
+				foreach (Collider too_close_collider in remove_us)
+					nearbies.Remove(too_close_collider);
+				
 				if (electrodes.ContainsKey(orientMe.GetOrientTo()))
 					orientMe.gameObject.transform.LookAt (electrodes [orientMe.GetOrientTo ()].transform);
 				else
 				{
-					Collider[] nearbies = Physics.OverlapSphere (orientMe.transform.position, NEARBY_THRESHHOLD);
-					if (nearbies.Length > 0)
+					if (nearbies.Count > 0)
 					{
 						orientMe.gameObject.transform.LookAt (nearbies [0].transform.position);
 					}
 				}
 				orientMe.transform.Rotate (new Vector3 (90, 0, 0));
+
+				//////these are micros
+				if (too_close.Count > MICRO_CLUSTER_THRESHHOLD)
+				{
+					micros.Add (orientMe.gameObject);
+				}
+			}
+
+			foreach (GameObject micro in micros)
+			{
+				micro.transform.position = micro.transform.position + new Vector3 (Random.Range (-MICRO_JITTER, MICRO_JITTER), Random.Range (-MICRO_JITTER, MICRO_JITTER), Random.Range (-MICRO_JITTER, MICRO_JITTER));
+				micro.transform.localScale = micro.transform.localScale * MICRO_SHRINK;
+				micro.GetComponent<Renderer> ().material.color = Color.black;
 			}
 		}
 	}

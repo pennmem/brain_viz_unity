@@ -20,14 +20,14 @@ GameObject:
   m_Component:
   - component: {fileID: 4210424601224254}
   - component: {fileID: 33716597047451150}
-  - component: {fileID: 136561573541293444}
   - component: {fileID: 23717150702597728}
   - component: {fileID: 114362148649839370}
   - component: {fileID: 114334637100709424}
   - component: {fileID: 114900591788306938}
-  m_Layer: 0
+  - component: {fileID: 65555543156786694}
+  m_Layer: 8
   m_Name: electrode
-  m_TagString: Untagged
+  m_TagString: electrode
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -86,6 +86,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1908829181392176}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &65555543156786694
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1908829181392176}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 1, z: 0.8}
+  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!114 &114334637100709424
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -124,16 +136,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee1d846a6bf8d4b1999d4325ab7fc392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &136561573541293444
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1908829181392176}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}

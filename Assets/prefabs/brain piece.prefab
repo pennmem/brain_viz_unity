@@ -24,8 +24,9 @@ GameObject:
   - component: {fileID: 114524208339898194}
   - component: {fileID: 114616859278743420}
   - component: {fileID: 33115193895892874}
+  - component: {fileID: 114685298846905654}
   m_Layer: 0
-  m_Name: baseObject
+  m_Name: brain piece
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -126,3 +127,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outline: {fileID: 114524208339898194}
+--- !u!114 &114685298846905654
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1781606977884158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a0a766c06c71482982049144fb401f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

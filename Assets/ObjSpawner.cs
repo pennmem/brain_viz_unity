@@ -70,7 +70,7 @@ public class ObjSpawner : MonoBehaviour
 
 	void Start()
 	{
-		gameObject.transform.Rotate(new Vector3(0, 0, 180));
+		gameObject.transform.localScale = new Vector3 (-1, 1, 1);
 	}
 
 

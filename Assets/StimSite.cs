@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StimSite : MonoBehaviour
+public class StimSite : BrainWorldMonobehavior
 {
 	private string subject_id;
 	private string contact_name;
@@ -10,8 +10,8 @@ public class StimSite : MonoBehaviour
 	private float deltarec;
 	private bool enhancement;
 
-	public float negativeStimBlueThreshhold = -60f;
-	public float positiveStimRedThreshhold = 60f;
+	public float negativeStimBlueThreshhold = -50f;
+	public float positiveStimRedThreshhold = 50f;
 
 	public void Initialize
 	(
@@ -40,4 +40,11 @@ public class StimSite : MonoBehaviour
 		);
 	}
 
+	protected override string InfoString()
+	{
+		string enhancementWord = "enhancement";
+		if (!enhancement)
+			enhancementWord = "impairment";
+		return "<b>Prior Stim Site:</b> " + deltarec.ToString ("###.##") + "% " + enhancementWord + "\n" + subject_id + " " + contact_name + " " + experiment;
+	}
 }

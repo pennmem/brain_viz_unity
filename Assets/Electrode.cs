@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Electrode : MonoBehaviour
+public class Electrode : BrainWorldMonobehavior
 {
 
 	private string contact_name;
@@ -22,15 +22,20 @@ public class Electrode : MonoBehaviour
 		orientTo = new_orient_to;
 
 		if (atlas.Equals ("monopolar_orig"))
-			gameObject.GetComponent<Renderer> ().material.color = Color.green;
+			gameObject.GetComponent<Renderer> ().material.color = Color.grey;
 		if (atlas.Equals ("monopolar_dykstra"))
-			gameObject.GetComponent<Renderer> ().material.color = Color.yellow;
+			gameObject.GetComponent<Renderer> ().material.color = Color.black;
 		if (atlas.Equals ("bipolar_dykstra"))
-			gameObject.GetComponent<Renderer> ().material.color = Color.magenta;
+			gameObject.GetComponent<Renderer> ().material.color = Color.white;
 	}
 
 	public string GetOrientTo()
 	{
 		return orientTo;
+	}
+
+	protected override string InfoString ()
+	{
+		return "<b>Contact:</b> " + contact_name + "\n" + contact_type + ", " + atlas + " atlas"; 
 	}
 }
