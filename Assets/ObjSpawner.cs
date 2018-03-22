@@ -68,5 +68,10 @@ public class ObjSpawner : MonoBehaviour
 			monoBehavior.enabled = true;
 	}
 
+	void Start()
+	{
+		gameObject.transform.Rotate(new Vector3(0, 0, 180));
+	}
+
 
 }

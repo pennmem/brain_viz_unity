@@ -9,6 +9,8 @@ public class ElectrodeSpawner : MonoBehaviour
 
 	private static Dictionary<string, GameObject> atlasParents = new Dictionary<string, GameObject> ();
 
+	private const float NEARBY_THRESHHOLD = 5f;
+
 	void Awake ()
 	{
 		using(var reader = new System.IO.StreamReader(electrodeCSVPath))
@@ -40,6 +42,7 @@ public class ElectrodeSpawner : MonoBehaviour
 					float.Parse(values[2]),
 					float.Parse(values[3]),
 					float.Parse(values[4]),
+					values[5],
 					values[6]
 				);
 
@@ -51,6 +54,15 @@ public class ElectrodeSpawner : MonoBehaviour
 			{
 				if (electrodes.ContainsKey(orientMe.GetOrientTo()))
 					orientMe.gameObject.transform.LookAt (electrodes [orientMe.GetOrientTo ()].transform);
+				else
+				{
+					Collider[] nearbies = Physics.OverlapSphere (orientMe.transform.position, NEARBY_THRESHHOLD);
+					if (nearbies.Length > 0)
+					{
+						orientMe.gameObject.transform.LookAt (nearbies [0].transform.position);
+					}
+				}
+				orientMe.transform.Rotate (new Vector3 (90, 0, 0));
 			}
 		}
 	}
