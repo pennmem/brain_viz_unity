@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityExtension;
 
-public class ObjSpawner : MonoBehaviour
+public class ObjIOObjSpawner : MonoBehaviour
 {
 	public GameObject dkLeftParent;
 	public GameObject dkRightParent;
 	public GameObject hcpLeftParent;
 	public GameObject hcpRightParent;
+	public GameObject baseObject;
 	public string pathToFolderWithObjs;
+	public Material brainMaterial;
 
 	public MonoBehaviour[] enableWhenFinished;
 
@@ -29,24 +31,25 @@ public class ObjSpawner : MonoBehaviour
 				if (fileName.Contains("pial"))
 					continue;
 
-				// Load the .obj using TriLib
-				GameObject targetObject;
-				using (TriLib.AssetLoader assetLoader = new TriLib.AssetLoader())
-				{
-					byte[] fileData = System.IO.File.ReadAllBytes(filePath);
-					targetObject = assetLoader.LoadFromMemory(fileData, ".obj");
-				}
-
+				GameObject targetObject = Instantiate<GameObject>(baseObject);
 				targetObject.name = fileName;
 				loadedObjs.Add (targetObject);
 
+				//	Load the .obj using the OBJ-IO asset
+				System.IO.Stream lStream = new System.IO.FileStream(filePath, System.IO.FileMode.Open);
+				OBJData lOBJData = OBJLoader.LoadOBJ(lStream);
+				MeshFilter filter = targetObject.GetComponent<MeshFilter>();
+				filter.mesh.LoadOBJ(lOBJData);
+				lStream.Close();
+				lStream = null;
+				lOBJData = null;
+
 				//set up the components
-				GameObject importantChild = targetObject.GetComponentInChildren<MeshRenderer>().gameObject;
-				//GameObject importantChild = targetObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject;
-				importantChild.AddComponent<MeshCollider>();
-				importantChild.AddComponent<MouseOverOutline> ().outline = importantChild.AddComponent<cakeslice.Outline> ();
-				importantChild.AddComponent<BrainPiece> ();
-				importantChild.name = targetObject.name;
+				filter.mesh.name = fileName;
+				targetObject.GetComponent<MeshCollider> ().sharedMesh = filter.mesh;
+				filter.mesh.RecalculateNormals ();
+				MeshRenderer meshRenderer = targetObject.GetComponent<MeshRenderer>();
+				meshRenderer.material = brainMaterial;	
 
 				if (fileName.Contains ("hcp") && fileName.Contains ("lh"))
 					targetObject.transform.parent = hcpLeftParent.transform;
