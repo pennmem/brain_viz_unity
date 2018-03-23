@@ -41,6 +41,7 @@ public class ObjSpawner : MonoBehaviour
 
 				//set up the components
 				GameObject importantChild = targetObject.GetComponentInChildren<MeshRenderer>().gameObject;
+				//GameObject importantChild = targetObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject;
 				importantChild.AddComponent<MeshCollider>();
 				importantChild.AddComponent<MouseOverOutline> ().outline = importantChild.AddComponent<cakeslice.Outline> ();
 				importantChild.AddComponent<BrainPiece> ();
