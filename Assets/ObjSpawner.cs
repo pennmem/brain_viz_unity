@@ -41,11 +41,10 @@ public class ObjSpawner : MonoBehaviour
 				lStream = null;
 				lOBJData = null;
 
+				//set up the components
 				filter.mesh.name = fileName;
 				targetObject.GetComponent<MeshCollider> ().sharedMesh = filter.mesh;
 				filter.mesh.RecalculateNormals ();
-				//filter.mesh.RecalculateTangents ();
-				//filter.mesh.RecalculateBounds ();
 				MeshRenderer meshRenderer = targetObject.GetComponent<MeshRenderer>();
 				meshRenderer.material = brainMaterial;	
 
@@ -59,8 +58,6 @@ public class ObjSpawner : MonoBehaviour
 					targetObject.transform.parent = dkRightParent.transform;
 				else
 					throw new UnityException ("An obj with an unrecorgnized naming exists.");
-
-				//yield return null;
 			}
 		}
 		Debug.Log ("Load finished");
@@ -70,6 +67,7 @@ public class ObjSpawner : MonoBehaviour
 
 	void Start()
 	{
+		//mirror everything
 		gameObject.transform.localScale = new Vector3 (-1, 1, 1);
 	}
 
