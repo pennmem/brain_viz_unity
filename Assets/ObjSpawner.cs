@@ -28,25 +28,23 @@ public class ObjSpawner : MonoBehaviour
 				if (fileName.Contains("pial"))
 					continue;
 
-				GameObject targetObject = Instantiate<GameObject>(baseObject);
+				// Load the .obj using TriLib
+				GameObject targetObject;
+				using (TriLib.AssetLoader assetLoader = new TriLib.AssetLoader())
+				{
+					byte[] fileData = System.IO.File.ReadAllBytes(filePath);
+					targetObject = assetLoader.LoadFromMemory(fileData, ".obj");
+				}
+
 				targetObject.name = fileName;
 				loadedObjs.Add (targetObject);
 
-				//	Load the .obj using the OBJ-IO asset
-				System.IO.Stream lStream = new System.IO.FileStream(filePath, System.IO.FileMode.Open);
-				OBJData lOBJData = OBJLoader.LoadOBJ(lStream);
-				MeshFilter filter = targetObject.GetComponent<MeshFilter>();
-				filter.mesh.LoadOBJ(lOBJData);
-				lStream.Close();
-				lStream = null;
-				lOBJData = null;
-
 				//set up the components
-				filter.mesh.name = fileName;
-				targetObject.GetComponent<MeshCollider> ().sharedMesh = filter.mesh;
-				filter.mesh.RecalculateNormals ();
-				MeshRenderer meshRenderer = targetObject.GetComponent<MeshRenderer>();
-				meshRenderer.material = brainMaterial;	
+				GameObject importantChild = targetObject.GetComponentInChildren<MeshRenderer>().gameObject;
+				importantChild.AddComponent<MeshCollider>();
+				importantChild.AddComponent<MouseOverOutline> ().outline = importantChild.AddComponent<cakeslice.Outline> ();
+				importantChild.AddComponent<BrainPiece> ();
+				importantChild.name = targetObject.name;
 
 				if (fileName.Contains ("hcp") && fileName.Contains ("lh"))
 					targetObject.transform.parent = hcpLeftParent.transform;
