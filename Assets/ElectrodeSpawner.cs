@@ -17,17 +17,17 @@ public class ElectrodeSpawner : MonoBehaviour
 
 	void Awake ()
 	{
-		using(var reader = new System.IO.StreamReader(electrodeCSVPath))
+		using(System.IO.TextReader reader = GetElectrodeCSVReader())
 		{
 			Dictionary<string, Electrode> electrodes = new Dictionary<string, Electrode> ();
 
 			reader.ReadLine (); //discard the first line, which contains column names
-			while (!reader.EndOfStream)
+			string line;
+			while ((line = reader.ReadLine()) != null)
 			{
 				GameObject indicator = Instantiate (electrodeIndicatorPrefab);
 				Electrode electrode = indicator.GetComponent<Electrode> ();
 
-				string line = reader.ReadLine();
 				string[] values = line.Split(',');
 
 				string atlas = values [5];
@@ -98,6 +98,12 @@ public class ElectrodeSpawner : MonoBehaviour
 				micro.GetComponent<Renderer> ().material.color = Color.black;
 			}
 		}
+	}
+
+	private System.IO.TextReader GetElectrodeCSVReader()
+	{
+		string csvText = System.IO.File.ReadAllText (electrodeCSVPath);
+		return new System.IO.StringReader(csvText);
 	}
 
 	public static Dictionary<string, GameObject> GetAtlasParentDict()
