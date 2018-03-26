@@ -12,6 +12,7 @@ public class ObjSpawner : MonoBehaviour
 	public string pathToFolderWithObjs;
 
 	public MonoBehaviour[] enableWhenFinished;
+	public GameObject[] disableWhenFinished;
 
 	void Awake ()
 	{
@@ -61,15 +62,10 @@ public class ObjSpawner : MonoBehaviour
 			}
 		}
 		Debug.Log ("Load finished");
+
 		foreach (MonoBehaviour monoBehavior in enableWhenFinished)
 			monoBehavior.enabled = true;
+		foreach (GameObject disableMe in disableWhenFinished)
+			disableMe.SetActive (false);
 	}
-
-	void Start()
-	{
-		//mirror everything
-		gameObject.transform.localScale = new Vector3 (-1, 1, 1);
-	}
-
-
 }
