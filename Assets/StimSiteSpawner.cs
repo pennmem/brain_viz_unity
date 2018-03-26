@@ -16,12 +16,12 @@ public class StimSiteSpawner : MonoBehaviour
 			List<StimSite> stimSites = new List<StimSite> ();
 
 			reader.ReadLine (); //discard the first line, which contains column names
-			while (!reader.EndOfStream)
+			string line;
+			while ((line = reader.ReadLine()) != null)
 			{
 				GameObject indicator = Instantiate (stimSiteIndicatorPrefab);
 				StimSite stimSite = indicator.GetComponent<StimSite> ();
 
-				string line = reader.ReadLine();
 				string[] values = line.Split(',');
 
 				stimSite.Initialize
@@ -43,8 +43,9 @@ public class StimSiteSpawner : MonoBehaviour
 	}
 	
 
-	void Update ()
+	private System.IO.TextReader GetStimSiteCSVReader()
 	{
-		
+		string csvText = System.IO.File.ReadAllText (stimSiteCSVPath);
+		return new System.IO.StringReader(csvText);
 	}
 }
