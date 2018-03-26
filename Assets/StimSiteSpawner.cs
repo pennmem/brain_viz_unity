@@ -11,7 +11,7 @@ public class StimSiteSpawner : MonoBehaviour
 
 	void Awake ()
 	{
-		using(var reader = new System.IO.StreamReader(stimSiteCSVPath))
+		using(System.IO.TextReader reader = GetStimSiteCSVReader())
 		{
 			List<StimSite> stimSites = new List<StimSite> ();
 
