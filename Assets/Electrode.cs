@@ -40,7 +40,7 @@ public class Electrode : BrainWorldMonobehavior
 		isMicro = true;
 	}
 
-	protected override string InfoString ()
+	public override string InfoString ()
 	{
 		string infoString = "<b>Contact:</b> " + contact_name + "\n" + contact_type + ", " + atlas + " atlas";
 		if (isMicro)

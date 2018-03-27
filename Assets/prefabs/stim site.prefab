@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 114001134619152758}
   - component: {fileID: 114244024011536100}
   - component: {fileID: 114612393148563838}
+  - component: {fileID: 114064993519944236}
   m_Layer: 0
   m_Name: stim site
   m_TagString: Untagged
@@ -99,6 +100,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   negativeStimBlueThreshhold: -60
   positiveStimRedThreshhold: 60
+--- !u!114 &114064993519944236
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1511190548697102}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 1
+  eraseRenderer: 0
+  originalLayer: 0
+  originalMaterials: []
 --- !u!114 &114244024011536100
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -126,6 +142,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outline: {fileID: 114244024011536100}
+  clickOutline: {fileID: 114064993519944236}
+  popupInfoPrefab: {fileID: 1814079573299960, guid: 9d96d7e90c83a4ce29042faa0e638b42,
+    type: 2}
 --- !u!135 &135008870997879728
 SphereCollider:
   m_ObjectHideFlags: 1

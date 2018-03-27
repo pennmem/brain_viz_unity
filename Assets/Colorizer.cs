@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Colorizer : MonoBehaviour
 {
+	void Start()
+	{
+		ColorEverythingWhite ();
+	}
+
 	private Renderer[] GetRenderers()
 	{
 		return GetComponentsInChildren<Renderer> ();

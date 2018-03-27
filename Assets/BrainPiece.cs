@@ -17,7 +17,7 @@ public class BrainPiece : BrainWorldMonobehavior
 		
 	}
 
-	protected override string InfoString ()
+	public override string InfoString ()
 	{
 		string[] splitName = gameObject.name.Split ('.');
 		string infoText = "<b>Brain piece: </b>";

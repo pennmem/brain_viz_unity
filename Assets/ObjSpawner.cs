@@ -14,6 +14,9 @@ public class ObjSpawner : MonoBehaviour
 	public MonoBehaviour[] enableWhenFinished;
 	public GameObject[] disableWhenFinished;
 
+	public GameObject popupPrefab;
+	public GameObject popupCanvas;
+
 	void Awake ()
 	{
 		if (!this.enabled)
@@ -40,9 +43,14 @@ public class ObjSpawner : MonoBehaviour
 
 			//set up the components
 			GameObject importantChild = targetObject.GetComponentInChildren<MeshRenderer>().gameObject;
-			//GameObject importantChild = targetObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject;
+			//GameObject importantChild = targetObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject; //is this faster?  signs point to no
 			importantChild.AddComponent<MeshCollider>();
 			importantChild.AddComponent<MouseOverOutline> ().outline = importantChild.AddComponent<cakeslice.Outline> ();
+			cakeslice.Outline clickOutline = importantChild.AddComponent<cakeslice.Outline> ();
+			clickOutline.color = 1;
+			clickOutline.enabled = false;
+			importantChild.GetComponent<MouseOverOutline> ().clickOutline = clickOutline;
+			importantChild.GetComponent<MouseOverOutline> ().popupInfoPrefab = popupPrefab;
 			importantChild.AddComponent<BrainPiece> ();
 			importantChild.name = targetObject.name;
 

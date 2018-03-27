@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class BrainWorldMonobehavior : MonoBehaviour
 {
-	protected abstract string InfoString();
+	public abstract string InfoString();
 
 	void OnMouseOver()
 	{

@@ -50,7 +50,7 @@ public class StimSite : BrainWorldMonobehavior
 		}
 	}
 
-	protected override string InfoString()
+	public override string InfoString()
 	{
 		string enhancementWord = "enhancement";
 		if (!enhancement)
