@@ -75,6 +75,34 @@ public class ObjSpawner : MonoBehaviour
 
 	private Dictionary<string, byte[]> GetNameToObjDict()
 	{
+		// naive parameters that are actually parameters
+//		WWWForm requestForm = new WWWForm ();
+//		requestForm.AddField ("subject", "337");
+//		requestForm.AddField ("static_file", "VOX_coords_mother_dykstra.txt");
+//		Dictionary<string, string> postParameters = new Dictionary<string, string>();
+//		postParameters.Add ("subject", "337");
+//		postParameters.Add ("static_file", "VOX_coords_mother_dykstra.txt");
+//		string json_body = "{ \"subject\":\"337\", \"static_file\":\"VOX_coords_mother_dykstra.txt\" }";
+//      string body = "subject=337&static_file=VOX_coords_mother_dykstra.txt";
+
+		string url_parameters = "?subject=337&static_file=VOX_coords_mother_dykstra.txt";
+
+		//var request = UnityEngine.Networking.UnityWebRequest.Put ("http://rhino2.psych.upenn.edu:8080/api/v1/brain/data/", body);
+		var request = new UnityEngine.Networking.UnityWebRequest("http://rhino2.psych.upenn.edu:8080/api/v1/brain/vizdata/" + url_parameters, "GET");
+		//request.uploadHandler = new UnityEngine.Networking.UploadHandlerRaw (System.Text.Encoding.UTF8.GetBytes (body));
+		request.downloadHandler = new UnityEngine.Networking.DownloadHandlerBuffer();
+		//request.SetRequestHeader ("Content-Type", "application/x-www-form-urlencoded");
+
+		//request.uploadHandler.data = System.Text.Encoding.UTF8.GetBytes (body);
+		Debug.Log (request.url);
+		//Debug.Log (System.Text.Encoding.UTF8.GetString(request.uploadHandler.data));
+
+		UnityEngine.Networking.UnityWebRequestAsyncOperation asyncOperation = request.SendWebRequest ();
+		while (!asyncOperation.isDone)
+			;
+		Debug.Log (request.downloadHandler.text);
+		Debug.Log (request.uploadedBytes);
+
 		Dictionary<string, byte[]> nameToObjDict = new Dictionary<string, byte[]> ();
 		string[] filePaths = System.IO.Directory.GetFiles (pathToFolderWithObjs);
 		foreach (string filePath in filePaths)
@@ -86,4 +114,19 @@ public class ObjSpawner : MonoBehaviour
 		}
 		return nameToObjDict;
 	}
+
+//  old temporary load from disk version
+//	private Dictionary<string, byte[]> GetNameToObjDict()
+//	{
+//		Dictionary<string, byte[]> nameToObjDict = new Dictionary<string, byte[]> ();
+//		string[] filePaths = System.IO.Directory.GetFiles (pathToFolderWithObjs);
+//		foreach (string filePath in filePaths)
+//		{
+//			if (System.IO.Path.GetExtension (filePath).Equals (".obj"))
+//			{
+//				nameToObjDict.Add (System.IO.Path.GetFileName (filePath), System.IO.File.ReadAllBytes (filePath));
+//			}
+//		}
+//		return nameToObjDict;
+//	}
 }
