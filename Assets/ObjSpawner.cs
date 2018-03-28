@@ -88,8 +88,34 @@ public class ObjSpawner : MonoBehaviour
 		return nameToObjDict;
 	}
 
+	private Dictionary<string, byte[]> GetNameToObjDict()
+	{
+
+		Dictionary<string, byte[]> nameToObjDict = new Dictionary<string, byte[]> ();
+		string[] filePaths = System.IO.Directory.GetFiles (pathToFolderWithObjs);
+		foreach (string filePath in filePaths)
+		{
+			if (System.IO.Path.GetExtension (filePath).Equals (".obj"))
+			{
+				nameToObjDict.Add (System.IO.Path.GetFileName (filePath), System.IO.File.ReadAllBytes (filePath));
+			}
+		}
+		return nameToObjDict;
+	}
+
 	private static string[] ObjFilePathListRequest()
 	{
+		string url_parameters = "?subject=337";
+
+		var request = new UnityEngine.Networking.UnityWebRequest("http://rhino2.psych.upenn.edu:8080/api/v1/brain/objlist/" + url_parameters, "GET");
+		request.downloadHandler = new UnityEngine.Networking.DownloadHandlerBuffer();
+		Debug.Log (request.url);
+
+		UnityEngine.Networking.UnityWebRequestAsyncOperation asyncOperation = request.SendWebRequest ();
+		while (!asyncOperation.isDone)
+			;
+		Debug.Log (request.downloadHandler.text);
+		Debug.Log (request.uploadedBytes);
 
 	}
 
