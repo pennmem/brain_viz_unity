@@ -75,15 +75,35 @@ public class ObjSpawner : MonoBehaviour
 
 	private Dictionary<string, byte[]> GetNameToObjDict()
 	{
+
+		Dictionary<string, byte[]> nameToObjDict = new Dictionary<string, byte[]> ();
+		string[] filePaths = System.IO.Directory.GetFiles (pathToFolderWithObjs);
+		foreach (string filePath in filePaths)
+		{
+			if (System.IO.Path.GetExtension (filePath).Equals (".obj"))
+			{
+				nameToObjDict.Add (System.IO.Path.GetFileName (filePath), System.IO.File.ReadAllBytes (filePath));
+			}
+		}
+		return nameToObjDict;
+	}
+
+	private static string[] ObjFilePathListRequest()
+	{
+
+	}
+
+	public static byte[] FileRequest()
+	{
 		// naive parameters that are actually parameters
-//		WWWForm requestForm = new WWWForm ();
-//		requestForm.AddField ("subject", "337");
-//		requestForm.AddField ("static_file", "VOX_coords_mother_dykstra.txt");
-//		Dictionary<string, string> postParameters = new Dictionary<string, string>();
-//		postParameters.Add ("subject", "337");
-//		postParameters.Add ("static_file", "VOX_coords_mother_dykstra.txt");
-//		string json_body = "{ \"subject\":\"337\", \"static_file\":\"VOX_coords_mother_dykstra.txt\" }";
-//      string body = "subject=337&static_file=VOX_coords_mother_dykstra.txt";
+		//		WWWForm requestForm = new WWWForm ();
+		//		requestForm.AddField ("subject", "337");
+		//		requestForm.AddField ("static_file", "VOX_coords_mother_dykstra.txt");
+		//		Dictionary<string, string> postParameters = new Dictionary<string, string>();
+		//		postParameters.Add ("subject", "337");
+		//		postParameters.Add ("static_file", "VOX_coords_mother_dykstra.txt");
+		//		string json_body = "{ \"subject\":\"337\", \"static_file\":\"VOX_coords_mother_dykstra.txt\" }";
+		//      string body = "subject=337&static_file=VOX_coords_mother_dykstra.txt";
 
 		string url_parameters = "?subject=337&static_file=VOX_coords_mother_dykstra.txt";
 
@@ -103,16 +123,6 @@ public class ObjSpawner : MonoBehaviour
 		Debug.Log (request.downloadHandler.text);
 		Debug.Log (request.uploadedBytes);
 
-		Dictionary<string, byte[]> nameToObjDict = new Dictionary<string, byte[]> ();
-		string[] filePaths = System.IO.Directory.GetFiles (pathToFolderWithObjs);
-		foreach (string filePath in filePaths)
-		{
-			if (System.IO.Path.GetExtension (filePath).Equals (".obj"))
-			{
-				nameToObjDict.Add (System.IO.Path.GetFileName (filePath), System.IO.File.ReadAllBytes (filePath));
-			}
-		}
-		return nameToObjDict;
 	}
 
 //  old temporary load from disk version
