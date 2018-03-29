@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElectrodeSpawner : MonoBehaviour
+public class ElectrodeSpawner : Spawner
 {
 	public string electrodeCSVPath;
 	public GameObject electrodeIndicatorPrefab;
@@ -15,7 +15,7 @@ public class ElectrodeSpawner : MonoBehaviour
 	private const float MICRO_SHRINK = 0.3f;
 	private const int MICRO_CLUSTER_THRESHHOLD = 15;
 
-	void Awake ()
+	public override void Spawn(string subjectName)
 	{
 		using(System.IO.TextReader reader = GetElectrodeCSVReader())
 		{

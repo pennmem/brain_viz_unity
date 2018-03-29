@@ -4,12 +4,12 @@ using UnityEngine;
 
 
 
-public class StimSiteSpawner : MonoBehaviour
+public class StimSiteSpawner : Spawner
 {
 	public string stimSiteCSVPath;
 	public GameObject stimSiteIndicatorPrefab;
 
-	void Awake ()
+	public override void Spawn(string subjectName)
 	{
 		using(System.IO.TextReader reader = GetStimSiteCSVReader())
 		{

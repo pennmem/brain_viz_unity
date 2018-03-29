@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityExtension;
 
-public class ObjSpawner : MonoBehaviour
+public class ObjSpawner : Spawner
 {
-	public GameObject dkLeftParent;
-	public GameObject dkRightParent;
-	public GameObject hcpLeftParent;
-	public GameObject hcpRightParent;
-	public string subjectName;
+	private GameObject dk;
+	private GameObject hcp;
+	private GameObject dkLeftParent;
+	private GameObject dkRightParent;
+	private GameObject hcpLeftParent;
+	private GameObject hcpRightParent;
 
 	public MonoBehaviour[] enableWhenFinished;
 	public GameObject[] disableWhenFinished;
@@ -21,12 +21,51 @@ public class ObjSpawner : MonoBehaviour
 	private static string FILE_REQUEST_ENDPOINT = "/api/v1/brain/vizdata/";
 	private static string OBJ_LIST_ENDPOINT = "/api/v1/brain/list_brain_objs/";
 
-	void Awake ()
+	public void SetDKActive(bool active)
+	{
+		dk.SetActive(active);
+	}
+
+	public void SetHCPActive(bool active)
+	{
+		hcp.SetActive(active);
+	}
+
+	public void SetLeftActive(bool active)
+	{
+		if (dk.activeSelf)
+			dkLeftParent.SetActive (active);
+		else
+			hcpLeftParent.SetActive(active);
+	}
+
+	public void SetRightActive(bool activate)
+	{
+		if (dk.activeSelf)
+			dkRightParent.SetActive (active);
+		else
+			hcpRightParent.SetActive(active);
+	}
+
+	public override void Spawn(string subjectName)
 	{
 		if (!this.enabled)
 			return;
 
-		Dictionary<string, byte[]> nameToObjDict = GetNameToObjDict();
+		hcp = new GameObject ("hcp");
+		hcp.transform.parent = gameObject.transform;
+		dk = new GameObject ("dk");
+		dk.transform.parent = gameObject.transform;
+		dkLeftParent = new GameObject ("dk left");
+		dkLeftParent.transform.parent = dk.transform;
+		dkRightParent = new GameObject ("dk right");
+		dkRightParent.transform.parent = dk.transform;
+		hcpLeftParent = new GameObject ("hcp left");
+		hcpLeftParent.transform.parent = hcp.transform;
+		hcpRightParent = new GameObject ("hcp right");
+		hcpRightParent.transform.parent = hcp.transform;
+
+		Dictionary<string, byte[]> nameToObjDict = GetNameToObjDict(subjectName);
 		List<GameObject> loadedObjs = new List<GameObject> ();
 
 		foreach (string objName in nameToObjDict.Keys)
@@ -77,7 +116,7 @@ public class ObjSpawner : MonoBehaviour
 			disableMe.SetActive (false);
 	}
 
-	private Dictionary<string, byte[]> GetNameToObjDict()
+	private Dictionary<string, byte[]> GetNameToObjDict(string subjectName)
 	{
 		Dictionary<string, byte[]> nameToObjDict = new Dictionary<string, byte[]> ();
 		string[] filenames = ObjFilePathListRequest(subjectName);

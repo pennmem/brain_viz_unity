@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ToggleSpawner : MonoBehaviour
+public class ToggleSpawner : Spawner
 {
 	public GameObject oneToggleForEachChildOf;
 	public GameObject toggle;
 	public float spacing = 0.1f;
 
-	void Start ()
+	public override void Spawn(string subjectName)
 	{
 		for (int i = 0; i < oneToggleForEachChildOf.transform.childCount; i++)
 		{
