@@ -9,7 +9,7 @@ public class ObjSpawner : MonoBehaviour
 	public GameObject dkRightParent;
 	public GameObject hcpLeftParent;
 	public GameObject hcpRightParent;
-	public string pathToFolderWithObjs;
+	public string subjectName;
 
 	public MonoBehaviour[] enableWhenFinished;
 	public GameObject[] disableWhenFinished;
@@ -79,58 +79,47 @@ public class ObjSpawner : MonoBehaviour
 
 	private Dictionary<string, byte[]> GetNameToObjDict()
 	{
-		FileRequest ();
-
 		Dictionary<string, byte[]> nameToObjDict = new Dictionary<string, byte[]> ();
-		string[] filePaths = System.IO.Directory.GetFiles (pathToFolderWithObjs);
-		foreach (string filePath in filePaths)
+		string[] filenames = ObjFilePathListRequest(subjectName);
+		foreach (string filename in filenames)
 		{
-			if (System.IO.Path.GetExtension (filePath).Equals (".obj"))
+			if (System.IO.Path.GetExtension (filename).Equals (".obj"))
 			{
-				nameToObjDict.Add (System.IO.Path.GetFileName (filePath), System.IO.File.ReadAllBytes (filePath));
+				nameToObjDict.Add (filename, FileRequest (subjectName, filename));
+			}
+			else
+			{
+				throw new UnityException ("I got a non-obj file from list objs get: " + filename);
 			}
 		}
 		return nameToObjDict;
 	}
 
-	private static string[] ObjFilePathListRequest()
+	private static string[] ObjFilePathListRequest(string subjectName)
 	{
-		string url_parameters = "?subject=R1337E";
+		string url_parameters = "?subject=" + subjectName;
 
-		var request = new UnityEngine.Networking.UnityWebRequest(RHINO_ADDRESS + OBJ_LIST_ENDPOINT + url_parameters, "GET");
-		request.downloadHandler = new UnityEngine.Networking.DownloadHandlerBuffer();
+		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + OBJ_LIST_ENDPOINT + url_parameters);
 		Debug.Log (request.url);
 
 		UnityEngine.Networking.UnityWebRequestAsyncOperation asyncOperation = request.SendWebRequest ();
 		while (!asyncOperation.isDone)
 			;
-		Debug.Log (request.downloadHandler.text);
-		Debug.Log (request.uploadedBytes);
-
-		return new string[0];
+		return request.downloadHandler.text.Split(',');
 
 	}
 
-	public static byte[] FileRequest()
+	public static byte[] FileRequest(string subjectName, string fileName)
 	{
-		string url_parameters = "?subject=337&static_file=VOX_coords_mother_dykstra.txt";
+		string url_parameters = "?subject=" + subjectName + "&static_file=" + fileName;
 
-		var request = new UnityEngine.Networking.UnityWebRequest(RHINO_ADDRESS + FILE_REQUEST_ENDPOINT + url_parameters, "GET");
-		//request.uploadHandler = new UnityEngine.Networking.UploadHandlerRaw (System.Text.Encoding.UTF8.GetBytes (body));
-		request.downloadHandler = new UnityEngine.Networking.DownloadHandlerBuffer();
-		//request.SetRequestHeader ("Content-Type", "application/x-www-form-urlencoded");
-
-		//request.uploadHandler.data = System.Text.Encoding.UTF8.GetBytes (body);
+		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + FILE_REQUEST_ENDPOINT + url_parameters);
 		Debug.Log (request.url);
-		//Debug.Log (System.Text.Encoding.UTF8.GetString(request.uploadHandler.data));
 
 		UnityEngine.Networking.UnityWebRequestAsyncOperation asyncOperation = request.SendWebRequest ();
 		while (!asyncOperation.isDone)
 			;
-		Debug.Log (request.downloadHandler.text);
-		Debug.Log (request.uploadedBytes);
-
-		return new byte[0];
-
+		
+		return request.downloadHandler.data;
 	}
 }
