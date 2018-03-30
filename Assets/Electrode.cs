@@ -35,6 +35,11 @@ public class Electrode : BrainWorldMonobehavior
 		return orientTo;
 	}
 
+	public string GetContactType()
+	{
+		return contact_type;
+	}
+
 	public void MarkMicro()
 	{
 		isMicro = true;
@@ -42,7 +47,20 @@ public class Electrode : BrainWorldMonobehavior
 
 	public override string InfoString ()
 	{
-		string infoString = "<b>Contact:</b> " + contact_name + "\n" + contact_type + ", " + atlas + " atlas";
+		string contact_type_full = contact_type;
+		switch (contact_type_full)
+		{
+			case "D":
+				contact_type_full = "Depth";
+				break;
+			case "S":
+				contact_type_full = "Strip";
+				break;
+			case "G":
+				contact_type_full = "Grid";
+				break;
+		}
+		string infoString = "<b>Contact:</b> " + contact_name + "\n" + contact_type_full + ", " + atlas + " atlas";
 		if (isMicro)
 		{
 			infoString = infoString + ". This is a micro contact.";

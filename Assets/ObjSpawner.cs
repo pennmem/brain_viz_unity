@@ -39,7 +39,7 @@ public class ObjSpawner : Spawner
 			hcpLeftParent.SetActive(active);
 	}
 
-	public void SetRightActive(bool activate)
+	public void SetRightActive(bool active)
 	{
 		if (dk.activeSelf)
 			dkRightParent.SetActive (active);
@@ -110,6 +110,7 @@ public class ObjSpawner : Spawner
 		}
 		Debug.Log ("Load finished");
 
+		hcp.SetActive (false);
 		foreach (MonoBehaviour monoBehavior in enableWhenFinished)
 			monoBehavior.enabled = true;
 		foreach (GameObject disableMe in disableWhenFinished)
@@ -158,7 +159,7 @@ public class ObjSpawner : Spawner
 		UnityEngine.Networking.UnityWebRequestAsyncOperation asyncOperation = request.SendWebRequest ();
 		while (!asyncOperation.isDone)
 			;
-		
+
 		return request.downloadHandler.data;
 	}
 }

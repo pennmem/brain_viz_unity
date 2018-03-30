@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class ToggleSpawner : Spawner
 {
-	public GameObject oneToggleForEachChildOf;
 	public GameObject toggle;
 	public float spacing = 0.1f;
 
 	public override void Spawn(string subjectName)
 	{
-		for (int i = 0; i < oneToggleForEachChildOf.transform.childCount; i++)
+		int i = 0;
+		foreach(string atlas_name in ElectrodeSpawner.GetAtlasParentDict().Keys)
 		{
-			GameObject child = oneToggleForEachChildOf.transform.GetChild (i).gameObject;
+			GameObject child = ElectrodeSpawner.GetAtlasParentDict()[atlas_name];
 
 			GameObject newToggle = Instantiate (toggle);
 			RectTransform rectTransform = newToggle.GetComponent<RectTransform> ();
@@ -22,7 +22,7 @@ public class ToggleSpawner : Spawner
 			newToggle.GetComponentInChildren<UnityEngine.UI.Text> ().text = child.name;
 			newToggle.name = child.name + " toggle";
 			newToggle.transform.SetParent (gameObject.transform, false);
+			i++;
 		}
 	}
-
 }

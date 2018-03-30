@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ElectrodeSpawner : Spawner
 {
-	public string electrodeCSVPath;
 	public GameObject electrodeIndicatorPrefab;
 
 	private static Dictionary<string, GameObject> atlasParents = new Dictionary<string, GameObject> ();
@@ -17,9 +16,10 @@ public class ElectrodeSpawner : Spawner
 
 	public override void Spawn(string subjectName)
 	{
-		using(System.IO.TextReader reader = GetElectrodeCSVReader())
+		using(System.IO.TextReader reader = GetElectrodeCSVReader(subjectName))
 		{
 			Dictionary<string, Electrode> electrodes = new Dictionary<string, Electrode> ();
+			atlasParents = new Dictionary<string, GameObject> ();
 
 			reader.ReadLine (); //discard the first line, which contains column names
 			string line;
@@ -81,6 +81,11 @@ public class ElectrodeSpawner : Spawner
 						orientMe.gameObject.transform.LookAt (nearbies [0].transform.position);
 					}
 				}
+
+				//point "S" and "G" towards the center of the brain
+				if (orientMe.GetContactType ().Contains ("G") || orientMe.GetContactType ().Contains ("S"))
+					orientMe.transform.LookAt (gameObject.transform);
+
 				orientMe.transform.Rotate (new Vector3 (90, 0, 0));
 
 				//////these are micros
@@ -89,6 +94,7 @@ public class ElectrodeSpawner : Spawner
 					orientMe.MarkMicro ();
 					micros.Add (orientMe.gameObject);
 				}
+					
 			}
 
 			foreach (GameObject micro in micros)
@@ -100,9 +106,9 @@ public class ElectrodeSpawner : Spawner
 		}
 	}
 
-	private System.IO.TextReader GetElectrodeCSVReader()
+	private System.IO.TextReader GetElectrodeCSVReader(string subjectName)
 	{
-		string csvText = System.IO.File.ReadAllText (electrodeCSVPath);
+		string csvText = System.Text.Encoding.Default.GetString(ObjSpawner.FileRequest(subjectName, "electrode_coordinates.csv"));
 		return new System.IO.StringReader(csvText);
 	}
 

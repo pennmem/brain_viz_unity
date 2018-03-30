@@ -6,12 +6,11 @@ using UnityEngine;
 
 public class StimSiteSpawner : Spawner
 {
-	public string stimSiteCSVPath;
 	public GameObject stimSiteIndicatorPrefab;
 
 	public override void Spawn(string subjectName)
 	{
-		using(System.IO.TextReader reader = GetStimSiteCSVReader())
+		using(System.IO.TextReader reader = GetStimSiteCSVReader(subjectName))
 		{
 			List<StimSite> stimSites = new List<StimSite> ();
 
@@ -43,9 +42,9 @@ public class StimSiteSpawner : Spawner
 	}
 	
 
-	private System.IO.TextReader GetStimSiteCSVReader()
+	private System.IO.TextReader GetStimSiteCSVReader(string subjectName)
 	{
-		string csvText = System.IO.File.ReadAllText (stimSiteCSVPath);
+		string csvText = System.Text.Encoding.Default.GetString(ObjSpawner.FileRequest(subjectName, subjectName+"_allcords.csv"));
 		return new System.IO.StringReader(csvText);
 	}
 }

@@ -7,9 +7,9 @@ public abstract class Spawner : MonoBehaviour
 
 	public void Despawn()
 	{
-		for (int i = 0; i < gameObject.transform.childCount; i++)
+		while (gameObject.transform.childCount > 0)
 		{
-			Destroy (gameObject.transform.GetChild (i));
+			DestroyImmediate (gameObject.transform.GetChild (0).gameObject);
 		}
 	}
 
