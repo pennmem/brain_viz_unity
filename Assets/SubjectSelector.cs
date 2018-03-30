@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SubjectSelector : MonoBehaviour
 {
-	public UnityEngine.UI.Text subjectNameInput;
+	public UnityEngine.UI.InputField subjectNameInput;
 	public Spawner[] spawners;
 	public GameObject loadingMessage;
 	public GameObject inputUI;
@@ -28,8 +28,10 @@ public class SubjectSelector : MonoBehaviour
 
 		foreach (Spawner spawner in spawners)
 		{
-			spawner.Spawn (subjectName);
-			Debug.Log (spawner.gameObject.name + ": " +spawner.gameObject.transform.childCount);
+			yield return StartCoroutine(spawner.Spawn (subjectName));
+			Debug.Log (spawner.gameObject.name + " loaded: " +spawner.gameObject.transform.childCount);
 		}
+
+		loadingMessage.GetComponentInChildren<UnityEngine.UI.Text> ().text = "<b>Mouse over something to display info</b>";
 	}
 }

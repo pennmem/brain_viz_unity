@@ -7,7 +7,7 @@ public class ToggleSpawner : Spawner
 	public GameObject toggle;
 	public float spacing = 0.1f;
 
-	public override void Spawn(string subjectName)
+	public override IEnumerator Spawn(string subjectName)
 	{
 		int i = 0;
 		foreach(string atlas_name in ElectrodeSpawner.GetAtlasParentDict().Keys)
@@ -24,5 +24,7 @@ public class ToggleSpawner : Spawner
 			newToggle.transform.SetParent (gameObject.transform, false);
 			i++;
 		}
+
+		yield return null;
 	}
 }

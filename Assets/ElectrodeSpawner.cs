@@ -14,9 +14,13 @@ public class ElectrodeSpawner : Spawner
 	private const float MICRO_SHRINK = 0.3f;
 	private const int MICRO_CLUSTER_THRESHHOLD = 15;
 
-	public override void Spawn(string subjectName)
+	public override IEnumerator Spawn(string subjectName)
 	{
-		using(System.IO.TextReader reader = GetElectrodeCSVReader(subjectName))
+		CoroutineWithData getElectrodeCSVReader = new CoroutineWithData (this, GetElectrodeCSVReader(subjectName));
+		yield return getElectrodeCSVReader.coroutine;
+		System.IO.TextReader reader = (System.IO.TextReader)getElectrodeCSVReader.result;
+
+		using(reader)
 		{
 			Dictionary<string, Electrode> electrodes = new Dictionary<string, Electrode> ();
 			atlasParents = new Dictionary<string, GameObject> ();
@@ -106,10 +110,12 @@ public class ElectrodeSpawner : Spawner
 		}
 	}
 
-	private System.IO.TextReader GetElectrodeCSVReader(string subjectName)
+	private IEnumerator GetElectrodeCSVReader(string subjectName)
 	{
-		string csvText = System.Text.Encoding.Default.GetString(ObjSpawner.FileRequest(subjectName, "electrode_coordinates.csv"));
-		return new System.IO.StringReader(csvText);
+		CoroutineWithData fileRequest = new CoroutineWithData (this, ObjSpawner.FileRequest (subjectName, "electrode_coordinates.csv"));
+		yield return fileRequest.coroutine;
+		string csvText = System.Text.Encoding.Default.GetString((byte[])fileRequest.result);
+		yield return new System.IO.StringReader(csvText);
 	}
 
 	public static Dictionary<string, GameObject> GetAtlasParentDict()

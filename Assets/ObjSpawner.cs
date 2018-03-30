@@ -17,7 +17,7 @@ public class ObjSpawner : Spawner
 	public GameObject popupPrefab;
 	public GameObject popupCanvas;
 
-	private static string RHINO_ADDRESS = "localhost:8000"; //"http://rhino2.psych.upenn.edu:8080"
+	private static string RHINO_ADDRESS = "http://localhost:8000"; //"http://rhino2.psych.upenn.edu:8080"
 	private static string FILE_REQUEST_ENDPOINT = "/api/v1/brain/vizdata/";
 	private static string OBJ_LIST_ENDPOINT = "/api/v1/brain/list_brain_objs/";
 
@@ -47,11 +47,8 @@ public class ObjSpawner : Spawner
 			hcpRightParent.SetActive(active);
 	}
 
-	public override void Spawn(string subjectName)
+	public override IEnumerator Spawn(string subjectName)
 	{
-		if (!this.enabled)
-			return;
-
 		hcp = new GameObject ("hcp");
 		hcp.transform.parent = gameObject.transform;
 		dk = new GameObject ("dk");
@@ -65,7 +62,25 @@ public class ObjSpawner : Spawner
 		hcpRightParent = new GameObject ("hcp right");
 		hcpRightParent.transform.parent = hcp.transform;
 
-		Dictionary<string, byte[]> nameToObjDict = GetNameToObjDict(subjectName);
+		//BUILD NAME TO OBJ DICT
+		Dictionary<string, byte[]> nameToObjDict = new Dictionary<string, byte[]> ();
+		CoroutineWithData objFilePathListRequest = new CoroutineWithData (this, ObjFilePathListRequest (subjectName));
+		yield return objFilePathListRequest.coroutine;
+		string[] filenames = (string[])objFilePathListRequest.result;
+		foreach (string filename in filenames)
+		{
+			if (System.IO.Path.GetExtension (filename).Equals (".obj"))
+			{
+				CoroutineWithData objRequest = new CoroutineWithData (this, FileRequest (subjectName, filename));
+				yield return objRequest.coroutine;
+				nameToObjDict.Add (filename, (byte[])objRequest.result);
+			}
+			else
+			{
+				throw new UnityException ("I got a non-obj file from list objs get: " + filename);
+			}
+		}
+
 		List<GameObject> loadedObjs = new List<GameObject> ();
 
 		foreach (string objName in nameToObjDict.Keys)
@@ -117,49 +132,32 @@ public class ObjSpawner : Spawner
 			disableMe.SetActive (false);
 	}
 
-	private Dictionary<string, byte[]> GetNameToObjDict(string subjectName)
-	{
-		Dictionary<string, byte[]> nameToObjDict = new Dictionary<string, byte[]> ();
-		string[] filenames = ObjFilePathListRequest(subjectName);
-		foreach (string filename in filenames)
-		{
-			if (System.IO.Path.GetExtension (filename).Equals (".obj"))
-			{
-				nameToObjDict.Add (filename, FileRequest (subjectName, filename));
-			}
-			else
-			{
-				throw new UnityException ("I got a non-obj file from list objs get: " + filename);
-			}
-		}
-		return nameToObjDict;
-	}
-
-	private static string[] ObjFilePathListRequest(string subjectName)
+	private static IEnumerator ObjFilePathListRequest(string subjectName)
 	{
 		string url_parameters = "?subject=" + subjectName;
 
 		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + OBJ_LIST_ENDPOINT + url_parameters);
-		Debug.Log (request.url);
 
-		UnityEngine.Networking.UnityWebRequestAsyncOperation asyncOperation = request.SendWebRequest ();
-		while (!asyncOperation.isDone)
-			;
-		return request.downloadHandler.text.Split(',');
+		request.SendWebRequest ();
+		Debug.Log ("Sending request to: " + request.url);
+		while (!request.isDone)
+			yield return null;
+
+		yield return request.downloadHandler.text.Split(',');
 
 	}
 
-	public static byte[] FileRequest(string subjectName, string fileName)
+	public static IEnumerator FileRequest(string subjectName, string fileName)
 	{
 		string url_parameters = "?subject=" + subjectName + "&static_file=" + fileName;
 
 		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + FILE_REQUEST_ENDPOINT + url_parameters);
-		Debug.Log (request.url);
 
-		UnityEngine.Networking.UnityWebRequestAsyncOperation asyncOperation = request.SendWebRequest ();
-		while (!asyncOperation.isDone)
-			;
+		request.SendWebRequest ();
+		Debug.Log ("Sending request to: " + request.url);
+		while (!request.isDone)
+			yield return null;
 
-		return request.downloadHandler.data;
+		yield return request.downloadHandler.data;
 	}
 }

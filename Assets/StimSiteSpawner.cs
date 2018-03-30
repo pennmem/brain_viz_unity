@@ -8,9 +8,11 @@ public class StimSiteSpawner : Spawner
 {
 	public GameObject stimSiteIndicatorPrefab;
 
-	public override void Spawn(string subjectName)
+	public override IEnumerator Spawn(string subjectName)
 	{
-		using(System.IO.TextReader reader = GetStimSiteCSVReader(subjectName))
+		CoroutineWithData getStimSiteCSVReader = new CoroutineWithData (this, GetStimSiteCSVReader(subjectName));
+		yield return getStimSiteCSVReader.coroutine;
+		using(System.IO.StringReader reader = (System.IO.StringReader)getStimSiteCSVReader.result)
 		{
 			List<StimSite> stimSites = new List<StimSite> ();
 
@@ -42,9 +44,11 @@ public class StimSiteSpawner : Spawner
 	}
 	
 
-	private System.IO.TextReader GetStimSiteCSVReader(string subjectName)
+	private IEnumerator GetStimSiteCSVReader(string subjectName)
 	{
-		string csvText = System.Text.Encoding.Default.GetString(ObjSpawner.FileRequest(subjectName, subjectName+"_allcords.csv"));
-		return new System.IO.StringReader(csvText);
+		CoroutineWithData fileRequest = new CoroutineWithData (this, ObjSpawner.FileRequest (subjectName, subjectName + "_allcords.csv"));
+		yield return fileRequest.coroutine;
+		string csvText = System.Text.Encoding.Default.GetString((byte[])fileRequest.result);
+		yield return new System.IO.StringReader(csvText);
 	}
 }

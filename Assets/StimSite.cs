@@ -45,7 +45,6 @@ public class StimSite : BrainWorldMonobehavior
 
 		if (gameObject.transform.position.sqrMagnitude > MAGNITUDE_CUTOFF * MAGNITUDE_CUTOFF)
 		{
-			Debug.Log ("magnitude cutoff deactivated " + gameObject.name);
 			gameObject.SetActive (false);
 		}
 	}
