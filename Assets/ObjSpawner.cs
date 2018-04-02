@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityExtension;
 
 public class ObjSpawner : Spawner
 {
@@ -15,7 +16,7 @@ public class ObjSpawner : Spawner
 	public GameObject[] disableWhenFinished;
 
 	public GameObject popupPrefab;
-	public GameObject popupCanvas;
+	public Material brainMaterial;
 
 	private static string RHINO_ADDRESS = "http://localhost:8000"; //"http://rhino2.psych.upenn.edu:8080"
 	private static string FILE_REQUEST_ENDPOINT = "/api/v1/brain/vizdata/";
@@ -88,13 +89,8 @@ public class ObjSpawner : Spawner
 			if (objName.Contains("pial"))
 				continue;
 
-			// Load the .obj using TriLib
-			GameObject targetObject;
-			using (TriLib.AssetLoader assetLoader = new TriLib.AssetLoader())
-			{
-				byte[] fileData = nameToObjDict[objName];
-				targetObject = assetLoader.LoadFromMemory(fileData, ".obj");
-			}
+			byte[] fileData = nameToObjDict[objName];
+			GameObject targetObject = ObjIOLoad (fileData);
 
 			targetObject.name = objName;
 			loadedObjs.Add (targetObject);
@@ -130,6 +126,34 @@ public class ObjSpawner : Spawner
 			monoBehavior.enabled = true;
 		foreach (GameObject disableMe in disableWhenFinished)
 			disableMe.SetActive (false);
+	}
+
+	private GameObject ObjIOLoad(byte[] fileData)
+	{
+		/////////// Load the .obj using OBJIO
+		GameObject targetObject = new GameObject();
+		System.IO.Stream lStream = new System.IO.MemoryStream(fileData);
+		OBJData lOBJData = OBJLoader.LoadOBJ(lStream);
+		MeshFilter filter = targetObject.AddComponent<MeshFilter>();
+		filter.mesh.LoadOBJ(lOBJData);
+		lStream.Close();
+		lStream = null;
+		lOBJData = null;
+		targetObject.AddComponent<MeshRenderer> ().material = brainMaterial;
+		filter.mesh.RecalculateNormals ();
+		return targetObject;
+		///////////
+	}
+
+	private GameObject TriLibLoad(byte[] fileData)
+	{
+		// Load the .obj using TriLib
+		GameObject targetObject;
+		using (TriLib.AssetLoader assetLoader = new TriLib.AssetLoader())
+		{
+			targetObject = assetLoader.LoadFromMemory(fileData, ".obj");
+		}
+		return targetObject;
 	}
 
 	private static IEnumerator ObjFilePathListRequest(string subjectName)
