@@ -17,6 +17,7 @@ public class ObjSpawner : Spawner
 
 	public GameObject popupPrefab;
 	public Material brainMaterial;
+	public UnityEngine.UI.Text loadingText;
 
 	private static string RHINO_ADDRESS = "http://localhost:8000"; //"http://rhino2.psych.upenn.edu:8080"
 	private static string FILE_REQUEST_ENDPOINT = "/api/v1/brain/vizdata/";
@@ -50,6 +51,9 @@ public class ObjSpawner : Spawner
 
 	public override IEnumerator Spawn(string subjectName)
 	{
+		foreach (MonoBehaviour monoBehavior in enableWhenFinished)
+			monoBehavior.enabled = false;
+
 		hcp = new GameObject ("hcp");
 		hcp.transform.parent = gameObject.transform;
 		dk = new GameObject ("dk");
@@ -72,18 +76,21 @@ public class ObjSpawner : Spawner
 		{
 			if (System.IO.Path.GetExtension (filename).Equals (".obj"))
 			{
+				loadingText.text = "Downloading: " + filename;
 				CoroutineWithData objRequest = new CoroutineWithData (this, FileRequest (subjectName, filename));
 				yield return objRequest.coroutine;
 				nameToObjDict.Add (filename, (byte[])objRequest.result);
 			}
 			else
 			{
+				loadingText.text = "Error: I got a non-obj file from list objs get: " + filename;
 				throw new UnityException ("I got a non-obj file from list objs get: " + filename);
 			}
 		}
 
 		List<GameObject> loadedObjs = new List<GameObject> ();
 
+		loadingText.text = "Building brain . . .";
 		foreach (string objName in nameToObjDict.Keys)
 		{
 			if (objName.Contains("pial"))
@@ -118,6 +125,7 @@ public class ObjSpawner : Spawner
 				targetObject.transform.parent = dkRightParent.transform;
 			else
 				throw new UnityException ("An obj with an unrecorgnized naming exists.");
+			yield return null;
 		}
 		Debug.Log ("Load finished");
 
@@ -158,17 +166,16 @@ public class ObjSpawner : Spawner
 
 	private static IEnumerator ObjFilePathListRequest(string subjectName)
 	{
-		string url_parameters = "?subject=" + subjectName;
+			string url_parameters = "?subject=" + subjectName;
 
-		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + OBJ_LIST_ENDPOINT + url_parameters);
+			var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + OBJ_LIST_ENDPOINT + url_parameters);
 
-		request.SendWebRequest ();
-		Debug.Log ("Sending request to: " + request.url);
-		while (!request.isDone)
-			yield return null;
+			request.SendWebRequest ();
+			Debug.Log ("Sending request to: " + request.url);
+			while (!request.isDone)
+				yield return null;
 
-		yield return request.downloadHandler.text.Split(',');
-
+			yield return request.downloadHandler.text.Split(',');	
 	}
 
 	public static IEnumerator FileRequest(string subjectName, string fileName)
