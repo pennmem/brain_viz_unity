@@ -8,6 +8,7 @@ public class SubjectSelector : MonoBehaviour
 	public Spawner[] spawners;
 	public GameObject loadingMessage;
 	public GameObject inputUI;
+	public Colorizer colorizer;
 
 	public void Go()
 	{
@@ -45,5 +46,6 @@ public class SubjectSelector : MonoBehaviour
 		}
 
 		loadingtext.text = "<b>Mouse over something to display info</b>";
+		colorizer.Initialize ();
 	}
 }

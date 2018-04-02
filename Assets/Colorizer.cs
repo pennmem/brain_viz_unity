@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Colorizer : MonoBehaviour
 {
-	void Start()
+	public void Initialize()
 	{
 		ColorEverythingWhite ();
+		MakeOpaque ();
 	}
 
 	private Renderer[] GetRenderers()
