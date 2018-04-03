@@ -68,7 +68,6 @@ public class ObjSpawner : Spawner
 		hcpRightParent.transform.parent = hcp.transform;
 
 		//BUILD NAME TO OBJ DICT
-		Dictionary<string, byte[]> nameToObjDict = new Dictionary<string, byte[]> ();
 		CoroutineWithData objFilePathListRequest = new CoroutineWithData (this, ObjFilePathListRequest (subjectName));
 		yield return objFilePathListRequest.coroutine;
 		string[] filenames = (string[])objFilePathListRequest.result;
@@ -77,9 +76,7 @@ public class ObjSpawner : Spawner
 			if (System.IO.Path.GetExtension (filename).Equals (".obj"))
 			{
 				loadingText.text = "Downloading: " + filename;
-				CoroutineWithData objRequest = new CoroutineWithData (this, FileRequest (subjectName, filename));
-				yield return objRequest.coroutine;
-				nameToObjDict.Add (filename, (byte[])objRequest.result);
+				yield return StartCoroutine(FileRequestToObj (subjectName, filename));
 			}
 			else
 			{
@@ -87,18 +84,7 @@ public class ObjSpawner : Spawner
 				throw new UnityException ("I got a non-obj file from list objs get: " + filename);
 			}
 		}
-
-		//LOAD OBJS
-		loadingText.text = "Building brain . . .";
-		foreach (string objName in nameToObjDict.Keys)
-		{
-			if (objName.Contains("pial"))
-				continue;
-
-			byte[] fileData = nameToObjDict[objName];
-			BuildBrainPiece (fileData, objName);
-			yield return null;
-		}
+			
 		Debug.Log ("Load finished");
 
 		hcp.SetActive (false);
@@ -169,16 +155,16 @@ public class ObjSpawner : Spawner
 
 	private static IEnumerator ObjFilePathListRequest(string subjectName)
 	{
-			string url_parameters = "?subject=" + subjectName;
+		string url_parameters = "?subject=" + subjectName;
 
-			var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + OBJ_LIST_ENDPOINT + url_parameters);
+		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + OBJ_LIST_ENDPOINT + url_parameters);
 
-			request.SendWebRequest ();
-			Debug.Log ("Sending request to: " + request.url);
-			while (!request.isDone)
-				yield return null;
-
-			yield return request.downloadHandler.text.Split(',');	
+		request.SendWebRequest ();
+		Debug.Log ("Sending request to: " + request.url);
+		while (!request.downloadHandler.isDone)
+			yield return null;
+	
+		yield return request.downloadHandler.text.Split(',');	
 	}
 
 	public static IEnumerator FileRequest(string subjectName, string fileName)
@@ -189,9 +175,18 @@ public class ObjSpawner : Spawner
 
 		request.SendWebRequest ();
 		Debug.Log ("Sending request to: " + request.url);
-		while (!request.isDone)
+		while (!request.downloadHandler.isDone)
 			yield return null;
 
 		yield return request.downloadHandler.data;
+	}
+
+	private IEnumerator FileRequestToObj(string subjectName, string fileName)
+	{
+		CoroutineWithData objRequest = new CoroutineWithData (this, FileRequest (subjectName, fileName));
+		yield return objRequest.coroutine;
+		byte[] objData = (byte[])objRequest.result;
+		//Debug.Log (fileName + ": " + objData.Length.ToString());
+		BuildBrainPiece(objData, fileName);
 	}
 }

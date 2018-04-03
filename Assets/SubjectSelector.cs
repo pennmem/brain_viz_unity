@@ -20,7 +20,7 @@ public class SubjectSelector : MonoBehaviour
 		UnityEngine.UI.Text loadingtext = loadingMessage.GetComponentInChildren<UnityEngine.UI.Text> ();
 
 		string subjectName = subjectNameInput.text;
-		if (!subjectName [0].Equals ('R') || !subjectName [1].Equals ('1') || !char.IsUpper (subjectName [5]) || !(subjectName.Length == 6))
+		if (!(subjectName.Length == 6) || !subjectName [0].Equals ('R') || !subjectName [1].Equals ('1') || !char.IsUpper (subjectName [5]))
 		{
 			subjectNameInput.text = "INVALID";
 			yield break;
