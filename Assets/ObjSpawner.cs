@@ -88,8 +88,7 @@ public class ObjSpawner : Spawner
 			}
 		}
 
-		List<GameObject> loadedObjs = new List<GameObject> ();
-
+		//LOAD OBJS
 		loadingText.text = "Building brain . . .";
 		foreach (string objName in nameToObjDict.Keys)
 		{
@@ -97,34 +96,7 @@ public class ObjSpawner : Spawner
 				continue;
 
 			byte[] fileData = nameToObjDict[objName];
-			GameObject targetObject = ObjIOLoad (fileData);
-
-			targetObject.name = objName;
-			loadedObjs.Add (targetObject);
-
-			//set up the components
-			GameObject importantChild = targetObject.GetComponentInChildren<MeshRenderer>().gameObject;
-			//GameObject importantChild = targetObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject; //is this faster?  signs point to no
-			importantChild.AddComponent<MeshCollider>();
-			importantChild.AddComponent<MouseOverOutline> ().outline = importantChild.AddComponent<cakeslice.Outline> ();
-			cakeslice.Outline clickOutline = importantChild.AddComponent<cakeslice.Outline> ();
-			clickOutline.color = 1;
-			clickOutline.enabled = false;
-			importantChild.GetComponent<MouseOverOutline> ().clickOutline = clickOutline;
-			importantChild.GetComponent<MouseOverOutline> ().popupInfoPrefab = popupPrefab;
-			importantChild.AddComponent<BrainPiece> ();
-			importantChild.name = targetObject.name;
-
-			if (objName.Contains ("hcp") && objName.Contains ("lh"))
-				targetObject.transform.parent = hcpLeftParent.transform;
-			else if (objName.Contains ("hcp") && objName.Contains ("rh"))
-				targetObject.transform.parent = hcpRightParent.transform;
-			else if (objName.Contains ("lh"))
-				targetObject.transform.parent = dkLeftParent.transform;
-			else if (objName.Contains ("rh"))
-				targetObject.transform.parent = dkRightParent.transform;
-			else
-				throw new UnityException ("An obj with an unrecorgnized naming exists.");
+			BuildBrainPiece (fileData, objName);
 			yield return null;
 		}
 		Debug.Log ("Load finished");
@@ -134,6 +106,37 @@ public class ObjSpawner : Spawner
 			monoBehavior.enabled = true;
 		foreach (GameObject disableMe in disableWhenFinished)
 			disableMe.SetActive (false);
+	}
+
+	private void BuildBrainPiece(byte[] objData, string objName)
+	{
+		GameObject targetObject = ObjIOLoad (objData);
+
+		targetObject.name = objName;
+
+		//set up the components
+		GameObject importantChild = targetObject.GetComponentInChildren<MeshRenderer>().gameObject;
+		//GameObject importantChild = targetObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject; //is this faster?  signs point to no
+		importantChild.AddComponent<MeshCollider>();
+		importantChild.AddComponent<MouseOverOutline> ().outline = importantChild.AddComponent<cakeslice.Outline> ();
+		cakeslice.Outline clickOutline = importantChild.AddComponent<cakeslice.Outline> ();
+		clickOutline.color = 1;
+		clickOutline.enabled = false;
+		importantChild.GetComponent<MouseOverOutline> ().clickOutline = clickOutline;
+		importantChild.GetComponent<MouseOverOutline> ().popupInfoPrefab = popupPrefab;
+		importantChild.AddComponent<BrainPiece> ();
+		importantChild.name = targetObject.name;
+
+		if (objName.Contains ("hcp") && objName.Contains ("lh"))
+			targetObject.transform.parent = hcpLeftParent.transform;
+		else if (objName.Contains ("hcp") && objName.Contains ("rh"))
+			targetObject.transform.parent = hcpRightParent.transform;
+		else if (objName.Contains ("lh"))
+			targetObject.transform.parent = dkLeftParent.transform;
+		else if (objName.Contains ("rh"))
+			targetObject.transform.parent = dkRightParent.transform;
+		else
+			throw new UnityException ("An obj with an unrecorgnized naming exists.");
 	}
 
 	private GameObject ObjIOLoad(byte[] fileData)
