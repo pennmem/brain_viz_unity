@@ -19,9 +19,22 @@ public class ObjSpawner : Spawner
 	public Material brainMaterial;
 	public UnityEngine.UI.Text loadingText;
 
-	private static string RHINO_ADDRESS = "http://localhost:8000"; //"http://rhino2.psych.upenn.edu:8080"
+	private static string RHINO_ADDRESS = "http://rhino2.psych.upenn.edu:8083"; //"http://localhost:8000";
 	private static string FILE_REQUEST_ENDPOINT = "/api/v1/brain/vizdata/";
 	private static string OBJ_LIST_ENDPOINT = "/api/v1/brain/list_brain_objs/";
+
+	void Start()
+	{
+		string currentUrl = Application.absoluteURL;
+		if (currentUrl.Length == 0)
+		{
+			Debug.LogWarning ("Using default RHINO_ADDRESS");
+			return;
+		}
+		string baseUrl = currentUrl.Substring (0, currentUrl.Length - 6);
+		RHINO_ADDRESS = baseUrl;
+		Debug.Log ("Using rhino address: " + RHINO_ADDRESS);
+	}
 
 	public void SetDKActive(bool active)
 	{
