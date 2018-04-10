@@ -113,6 +113,7 @@ public class ElectrodeSpawner : Spawner
 	private IEnumerator GetElectrodeCSVReader(string subjectName)
 	{
 		CoroutineWithData fileRequest = new CoroutineWithData (this, ObjSpawner.FileRequest (subjectName, "electrode_coordinates.csv"));
+		Debug.Log ("Electroce coordinates received.");
 		yield return fileRequest.coroutine;
 		string csvText = System.Text.Encoding.Default.GetString((byte[])fileRequest.result);
 		yield return new System.IO.StringReader(csvText);

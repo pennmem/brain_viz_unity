@@ -9,6 +9,7 @@ public class SubjectSelector : MonoBehaviour
 	public GameObject loadingMessage;
 	public GameObject inputUI;
 	public Colorizer colorizer;
+	public MonoBehaviour[] disableWhileLoading;
 
 	public void Go()
 	{
@@ -17,6 +18,9 @@ public class SubjectSelector : MonoBehaviour
 
 	private IEnumerator DoLoad()
 	{
+		foreach (MonoBehaviour monoBehavior in disableWhileLoading)
+			monoBehavior.enabled = false;
+
 		UnityEngine.UI.Text loadingtext = loadingMessage.GetComponentInChildren<UnityEngine.UI.Text> ();
 
 		string subjectName = subjectNameInput.text;
@@ -48,5 +52,8 @@ public class SubjectSelector : MonoBehaviour
 
 		loadingtext.text = "<b>Mouse over something to display info</b>";
 		colorizer.Initialize ();
+
+		foreach (MonoBehaviour monoBehavior in disableWhileLoading)
+			monoBehavior.enabled = true;
 	}
 }

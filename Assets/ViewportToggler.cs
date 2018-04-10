@@ -6,11 +6,8 @@ public class ViewportToggler : MonoBehaviour
 {
 	float toggledValue = 0.8f;
 
-	private bool toggled = false;
-
-	public void ToggleViewport()
+	public void ToggleViewport(bool toggled)
 	{
-		toggled = !toggled;
 		if (toggled)
 			GetComponent<Camera> ().rect = new Rect (0, 0, toggledValue, 1);
 		else

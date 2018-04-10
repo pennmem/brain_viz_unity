@@ -12,9 +12,6 @@ public class ObjSpawner : Spawner
 	private GameObject hcpLeftParent;
 	private GameObject hcpRightParent;
 
-	public MonoBehaviour[] enableWhenFinished;
-	public GameObject[] disableWhenFinished;
-
 	public GameObject popupPrefab;
 	public Material brainMaterial;
 	public UnityEngine.UI.Text loadingText;
@@ -64,9 +61,6 @@ public class ObjSpawner : Spawner
 
 	public override IEnumerator Spawn(string subjectName)
 	{
-		foreach (MonoBehaviour monoBehavior in enableWhenFinished)
-			monoBehavior.enabled = false;
-
 		hcp = new GameObject ("hcp");
 		hcp.transform.parent = gameObject.transform;
 		dk = new GameObject ("dk");
@@ -101,10 +95,6 @@ public class ObjSpawner : Spawner
 		Debug.Log ("Load finished");
 
 		hcp.SetActive (false);
-		foreach (MonoBehaviour monoBehavior in enableWhenFinished)
-			monoBehavior.enabled = true;
-		foreach (GameObject disableMe in disableWhenFinished)
-			disableMe.SetActive (false);
 	}
 
 	private void BuildBrainPiece(byte[] objData, string objName)
