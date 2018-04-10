@@ -40,6 +40,7 @@ public class SubjectSelector : MonoBehaviour
 
 		foreach (Spawner spawner in spawners)
 		{
+			spawner.gameObject.SetActive (true);
 			loadingtext.text = "Spawning: " + spawner.gameObject.name;
 			yield return StartCoroutine(spawner.Spawn (subjectName));
 			Debug.Log (spawner.gameObject.name + " loaded: " +spawner.gameObject.transform.childCount);
