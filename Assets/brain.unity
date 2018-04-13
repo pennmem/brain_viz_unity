@@ -763,10 +763,10 @@ RectTransform:
   m_Father: {fileID: 1004556119}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.94100004, y: 0.9436283}
+  m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -36.5, y: -19.5}
+  m_SizeDelta: {x: 73, y: 39}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &273647714
 MonoBehaviour:
@@ -1297,7 +1297,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 999687559}
+  m_TargetTexture: {fileID: 1737823931}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -1778,8 +1778,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 482234084}
   outlineCamera: {fileID: 433383708}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 999687559}
-  extraRenderTexture: {fileID: 1381106671}
+  renderTexture: {fileID: 1737823931}
+  extraRenderTexture: {fileID: 912069473}
 --- !u!114 &482234088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2633,7 +2633,7 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 857859143}
---- !u!84 &999687559
+--- !u!84 &912069473
 RenderTexture:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -2644,7 +2644,7 @@ RenderTexture:
     Hash: 00000000000000000000000000000000
   m_ForcedFallbackFormat: 4
   m_DownscaleFallback: 0
-  m_Width: 1427
+  m_Width: 1285
   m_Height: 686
   m_AntiAliasing: 1
   m_DepthFormat: 1
@@ -2657,7 +2657,7 @@ RenderTexture:
   m_TextureSettings:
     serializedVersion: 2
     m_FilterMode: 1
-    m_Aniso: 0
+    m_Aniso: 1
     m_MipBias: 0
     m_WrapU: 1
     m_WrapV: 1
@@ -3424,10 +3424,10 @@ RectTransform:
   m_Father: {fileID: 692330594}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.086, y: 0.51317716}
-  m_AnchorMax: {x: 0.35527432, y: 0.6594642}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.086, y: 0.57600003}
+  m_AnchorMax: {x: 0.086, y: 0.57600003}
+  m_AnchoredPosition: {x: 163, y: 7}
+  m_SizeDelta: {x: 326, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1357388514
 MonoBehaviour:
@@ -3499,37 +3499,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 36, y: 42}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!84 &1381106671
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 1427
-  m_Height: 686
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 0
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1398349212
 GameObject:
   m_ObjectHideFlags: 0
@@ -3685,6 +3654,7 @@ GameObject:
   - component: {fileID: 1422925203}
   - component: {fileID: 1422925202}
   - component: {fileID: 1422925201}
+  - component: {fileID: 1422925204}
   m_Layer: 5
   m_Name: Subject name input
   m_TagString: Untagged
@@ -3757,7 +3727,7 @@ MonoBehaviour:
   m_LineType: 0
   m_HideMobileInput: 0
   m_CharacterValidation: 0
-  m_CharacterLimit: 0
+  m_CharacterLimit: 6
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -3808,6 +3778,19 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1422925199}
+--- !u!114 &1422925204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1422925199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4897a7815839348038ef336f14210cd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 1422925201}
+  invokeMe: {fileID: 442580850}
 --- !u!1 &1529125683
 GameObject:
   m_ObjectHideFlags: 0
@@ -4439,6 +4422,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   electrodeIndicatorPrefab: {fileID: 1908829181392176, guid: b037fa153c03142b1b1dccc1574abb0e,
     type: 2}
+--- !u!84 &1737823931
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 1285
+  m_Height: 686
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 0
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1742329871
 GameObject:
   m_ObjectHideFlags: 0
@@ -5078,10 +5092,10 @@ RectTransform:
   m_Father: {fileID: 1004556119}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.94100004, y: 0.9436283}
+  m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -36.5, y: -19.5}
+  m_SizeDelta: {x: 73, y: 39}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2038933689
 MonoBehaviour:
