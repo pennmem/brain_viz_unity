@@ -14,15 +14,16 @@ public class ElectrodeSpawner : Spawner
 	private const float MICRO_SHRINK = 0.3f;
 	private const int MICRO_CLUSTER_THRESHHOLD = 15;
 
+	private Dictionary<string, Electrode> electrodes = new Dictionary<string, Electrode> ();
+
 	public override IEnumerator Spawn(string subjectName)
 	{
-		CoroutineWithData getElectrodeCSVReader = new CoroutineWithData (this, GetElectrodeCSVReader(subjectName));
+		CoroutineWithData getElectrodeCSVReader = new CoroutineWithData (this, GetElectrodeFileReader(subjectName, "electrode_coordinates.csv"));
 		yield return getElectrodeCSVReader.coroutine;
 		System.IO.TextReader reader = (System.IO.TextReader)getElectrodeCSVReader.result;
 
 		using(reader)
 		{
-			Dictionary<string, Electrode> electrodes = new Dictionary<string, Electrode> ();
 			atlasParents = new Dictionary<string, GameObject> ();
 
 			reader.ReadLine (); //discard the first line, which contains column names
@@ -108,12 +109,29 @@ public class ElectrodeSpawner : Spawner
 				micro.GetComponent<Renderer> ().material.color = Color.black;
 			}
 		}
+
+		getElectrodeCSVReader = new CoroutineWithData (this, GetElectrodeFileReader(subjectName, "target_selection_table"));
+		yield return getElectrodeCSVReader.coroutine;
+		reader = (System.IO.TextReader)getElectrodeCSVReader.result;
+
+		using(reader)
+		{
+			reader.ReadLine (); //discard the first line, which contains column names
+			string line;
+			while ((line = reader.ReadLine ()) != null)
+			{
+				string[] values = line.Split(',');
+
+				Electrode thisElectrode = electrodes [values [0]];
+				thisElectrode.SetSMEValues (int.Parse(values [12]), int.Parse(values [11]), int.Parse(values [10]), int.Parse(values [9]));
+			}
+		}
 	}
 
-	private IEnumerator GetElectrodeCSVReader(string subjectName)
+	private IEnumerator GetElectrodeFileReader(string subjectName, string filename)
 	{
-		CoroutineWithData fileRequest = new CoroutineWithData (this, ObjSpawner.FileRequest (subjectName, "electrode_coordinates.csv"));
-		Debug.Log ("Electroce coordinates received.");
+		CoroutineWithData fileRequest = new CoroutineWithData (this, ObjSpawner.FileRequest (subjectName, filename));
+		Debug.Log ("Electrode coordinates received.");
 		yield return fileRequest.coroutine;
 		string csvText = System.Text.Encoding.Default.GetString((byte[])fileRequest.result);
 		yield return new System.IO.StringReader(csvText);
@@ -122,5 +140,25 @@ public class ElectrodeSpawner : Spawner
 	public static Dictionary<string, GameObject> GetAtlasParentDict()
 	{
 		return atlasParents;
+	}
+
+	public void ShowElectrodesByStat (bool pValueTrueTStatFalse, bool oneTenTrueHFAFalse, float value)
+	{
+		foreach (Electrode electrode in electrodes.Values)
+		{
+			float valueInQuestion = 0f;
+			if (pValueTrueTStatFalse && oneTenTrueHFAFalse)
+				valueInQuestion = electrode.GetPValue110 ();
+			if (pValueTrueTStatFalse && !oneTenTrueHFAFalse)
+				valueInQuestion = electrode.GetPValueHFA ();
+			if (!pValueTrueTStatFalse && oneTenTrueHFAFalse)
+				valueInQuestion = electrode.GetTStat110 ();
+			if (!pValueTrueTStatFalse && !oneTenTrueHFAFalse)
+				valueInQuestion = electrode.GetTStatHFA ();
+			if (pValueTrueTStatFalse)
+				electrode.gameObject.SetActive (valueInQuestion < value);
+			else
+				electrode.gameObject.SetActive (valueInQuestion > value);
+		}
 	}
 }

@@ -11,6 +11,11 @@ public class Electrode : BrainWorldMonobehavior
 	private string orientTo;
 	private bool isMicro = false;
 
+	private float pvalue110;
+	private float tstat110;
+	private float pvalueHFA;
+	private float tstatHFA;
+
 	private const float POSITION_SCALING_FACTOR = 50f;
 
 	public void Initialize(string new_contact_name, string new_contact_type, float new_x, float new_y, float new_z, string new_atlas, string new_orient_to)
@@ -28,6 +33,34 @@ public class Electrode : BrainWorldMonobehavior
 			gameObject.GetComponent<Renderer> ().material.color = Color.black;
 		if (atlas.Equals ("bipolar_dykstra"))
 			gameObject.GetComponent<Renderer> ().material.color = Color.white;
+	}
+
+	public void SetSMEValues(float new_pvalue110, float new_tstat110, float new_pvalueHFA, float new_tstatHFA)
+	{
+		pvalue110 = new_pvalue110;
+		tstat110 = new_tstat110;
+		pvalueHFA = new_pvalueHFA;
+		tstatHFA = new_tstatHFA;
+	}
+
+	public float GetPValue110()
+	{
+		return pvalue110;
+	}
+
+	public float GetTStat110()
+	{
+		return tstat110;
+	}
+
+	public float GetPValueHFA()
+	{
+		return pvalueHFA;
+	}
+
+	public float GetTStatHFA()
+	{
+		return tstatHFA;
 	}
 
 	public string GetOrientTo()

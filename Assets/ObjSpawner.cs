@@ -16,7 +16,7 @@ public class ObjSpawner : Spawner
 	public Material brainMaterial;
 	public UnityEngine.UI.Text loadingText;
 
-	private static string RHINO_ADDRESS = "http://rhino2.psych.upenn.edu:8083"; //"http://localhost:8000";
+	private static string RHINO_ADDRESS = "http://localhost:8000";//"http://rhino2.psych.upenn.edu:8083"; //
 	private static string FILE_REQUEST_ENDPOINT = "/api/v1/brain/vizdata/";
 	private static string OBJ_LIST_ENDPOINT = "/api/v1/brain/list_brain_objs/";
 
