@@ -16,23 +16,6 @@ public class ObjSpawner : Spawner
 	public Material brainMaterial;
 	public UnityEngine.UI.Text loadingText;
 
-	private static string RHINO_ADDRESS = "http://localhost:8000";//"http://rhino2.psych.upenn.edu:8083"; //
-	private static string FILE_REQUEST_ENDPOINT = "/api/v1/brain/vizdata/";
-	private static string OBJ_LIST_ENDPOINT = "/api/v1/brain/list_brain_objs/";
-
-	void Start()
-	{
-		string currentUrl = Application.absoluteURL;
-		if (currentUrl.Length == 0)
-		{
-			Debug.LogWarning ("Using default RHINO_ADDRESS");
-			return;
-		}
-		string baseUrl = currentUrl.Substring (0, currentUrl.Length - 6);
-		RHINO_ADDRESS = baseUrl;
-		Debug.Log ("Using rhino address: " + RHINO_ADDRESS);
-	}
-
 	public void SetDKActive(bool active)
 	{
 		dk.SetActive(active);
@@ -75,7 +58,7 @@ public class ObjSpawner : Spawner
 		hcpRightParent.transform.parent = hcp.transform;
 
 		//BUILD NAME TO OBJ DICT
-		CoroutineWithData objFilePathListRequest = new CoroutineWithData (this, ObjFilePathListRequest (subjectName));
+		CoroutineWithData objFilePathListRequest = new CoroutineWithData (this, RhinoRequestor.ObjFilePathListRequest (subjectName));
 		yield return objFilePathListRequest.coroutine;
 		string[] filenames = (string[])objFilePathListRequest.result;
 		foreach (string filename in filenames)
@@ -156,37 +139,9 @@ public class ObjSpawner : Spawner
 		return targetObject;
 	}
 
-	private static IEnumerator ObjFilePathListRequest(string subjectName)
-	{
-		string url_parameters = "?subject=" + subjectName;
-
-		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + OBJ_LIST_ENDPOINT + url_parameters);
-
-		request.SendWebRequest ();
-		Debug.Log ("Sending request to: " + request.url);
-		while (!request.downloadHandler.isDone)
-			yield return null;
-	
-		yield return request.downloadHandler.text.Split(',');	
-	}
-
-	public static IEnumerator FileRequest(string subjectName, string fileName)
-	{
-		string url_parameters = "?subject=" + subjectName + "&static_file=" + fileName;
-
-		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + FILE_REQUEST_ENDPOINT + url_parameters);
-
-		request.SendWebRequest ();
-		Debug.Log ("Sending request to: " + request.url);
-		while (!request.downloadHandler.isDone)
-			yield return null;
-
-		yield return request.downloadHandler.data;
-	}
-
 	private IEnumerator FileRequestToObj(string subjectName, string fileName)
 	{
-		CoroutineWithData objRequest = new CoroutineWithData (this, FileRequest (subjectName, fileName));
+		CoroutineWithData objRequest = new CoroutineWithData (this, RhinoRequestor.FileRequest (subjectName, fileName));
 		yield return objRequest.coroutine;
 		byte[] objData = (byte[])objRequest.result;
 		//Debug.Log (fileName + ": " + objData.Length.ToString());

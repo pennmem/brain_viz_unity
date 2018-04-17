@@ -341,37 +341,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 17531312}
---- !u!84 &21779995
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 1285
-  m_Height: 687
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 0
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &146823560
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,7 +390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -457,6 +426,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1183872059}
         m_MethodName: SetTextToMatchValue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1183872059}
+        m_MethodName: UpdateShownElectrodes
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -867,8 +847,8 @@ GameObject:
   m_Component:
   - component: {fileID: 273647713}
   - component: {fileID: 273647716}
-  - component: {fileID: 273647715}
   - component: {fileID: 273647714}
+  - component: {fileID: 273647715}
   m_Layer: 5
   m_Name: Options On
   m_TagString: Untagged
@@ -1642,7 +1622,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 2043166200}
+  m_TargetTexture: {fileID: 1923225323}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -2191,8 +2171,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 482234084}
   outlineCamera: {fileID: 433383708}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 2043166200}
-  extraRenderTexture: {fileID: 21779995}
+  renderTexture: {fileID: 1923225323}
+  extraRenderTexture: {fileID: 1468216106}
 --- !u!114 &482234088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2907,7 +2887,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 692330593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90258207396d64e4aa38b69c7638a3de, type: 3}
+  m_Script: {fileID: 11500000, guid: ebae332b63e50403d920ad55217ceea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   subjectNameInput: {fileID: 1422925201}
@@ -2920,8 +2900,8 @@ MonoBehaviour:
   inputUI: {fileID: 1357388512}
   colorizer: {fileID: 219582923}
   disableWhileLoading:
-  - {fileID: 1057535550}
   - {fileID: 273647714}
+  - {fileID: 1057535550}
 --- !u!222 &692330596
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4059,6 +4039,7 @@ MonoBehaviour:
   valueText: {fileID: 1101672689}
   whichStatDropdown: {fileID: 931300766}
   whichFreqDropdown: {fileID: 1929573729}
+  electrodeSpawner: {fileID: 1721843311}
 --- !u!1 &1202387915
 GameObject:
   m_ObjectHideFlags: 0
@@ -5092,6 +5073,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputField: {fileID: 1422925201}
   invokeMe: {fileID: 442580850}
+--- !u!84 &1468216106
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 1285
+  m_Height: 691
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 0
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1502238628
 GameObject:
   m_ObjectHideFlags: 0
@@ -6935,6 +6947,37 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1893116424}
+--- !u!84 &1923225323
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 1285
+  m_Height: 691
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 0
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1929573727
 GameObject:
   m_ObjectHideFlags: 0
@@ -7613,37 +7656,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2038933687}
---- !u!84 &2043166200
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 1285
-  m_Height: 687
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 0
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 0
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &2092868912
 GameObject:
   m_ObjectHideFlags: 0

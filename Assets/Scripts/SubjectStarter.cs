@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SubjectSelector : MonoBehaviour
+public class SubjectStarter : MonoBehaviour
 {
 	public UnityEngine.UI.InputField subjectNameInput;
 	public Spawner[] spawners;

@@ -11,6 +11,7 @@ public class Electrode : BrainWorldMonobehavior
 	private string orientTo;
 	private bool isMicro = false;
 
+	private bool SME_values_set = false;
 	private float pvalue110;
 	private float tstat110;
 	private float pvalueHFA;
@@ -37,6 +38,7 @@ public class Electrode : BrainWorldMonobehavior
 
 	public void SetSMEValues(float new_pvalue110, float new_tstat110, float new_pvalueHFA, float new_tstatHFA)
 	{
+		SME_values_set = true;
 		pvalue110 = new_pvalue110;
 		tstat110 = new_tstat110;
 		pvalueHFA = new_pvalueHFA;
@@ -98,6 +100,10 @@ public class Electrode : BrainWorldMonobehavior
 		{
 			infoString = infoString + ". This is a micro contact.";
 		}
+
+		if (SME_values_set)
+			infoString = infoString + "\n" + "SME Stats: HFA p=" + pvalueHFA.ToString ("0.00") + ", HFA t=" +
+						 tstatHFA.ToString ("0.00") + ", 110Hz p=" + pvalue110.ToString ("0.00") + ", 110Hz t=" + tstat110.ToString ("0.00");
 		return infoString;
 	}
 }

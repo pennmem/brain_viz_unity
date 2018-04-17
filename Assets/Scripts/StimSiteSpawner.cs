@@ -46,7 +46,7 @@ public class StimSiteSpawner : Spawner
 
 	private IEnumerator GetStimSiteCSVReader(string subjectName)
 	{
-		CoroutineWithData fileRequest = new CoroutineWithData (this, ObjSpawner.FileRequest (subjectName, subjectName + "_allcords.csv"));
+		CoroutineWithData fileRequest = new CoroutineWithData (this, RhinoRequestor.FileRequest (subjectName, subjectName + "_allcords.csv"));
 		yield return fileRequest.coroutine;
 		string csvText = System.Text.Encoding.Default.GetString((byte[])fileRequest.result);
 		yield return new System.IO.StringReader(csvText);

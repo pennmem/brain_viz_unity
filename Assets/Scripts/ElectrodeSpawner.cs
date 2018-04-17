@@ -55,7 +55,7 @@ public class ElectrodeSpawner : Spawner
 					values[6]
 				);
 
-				electrodes.Add(values[0], electrode);
+				electrodes.Add(values[0].ToUpper(), electrode);
 				indicator.transform.parent = atlasParents[atlas].transform;
 			}
 
@@ -122,15 +122,19 @@ public class ElectrodeSpawner : Spawner
 			{
 				string[] values = line.Split(',');
 
+				//foreach (string key in electrodes.Keys)
+				//	Debug.Log (key);
+				//Debug.Log (values [0]);
+
 				Electrode thisElectrode = electrodes [values [0]];
-				thisElectrode.SetSMEValues (int.Parse(values [12]), int.Parse(values [11]), int.Parse(values [10]), int.Parse(values [9]));
+				thisElectrode.SetSMEValues (float.Parse(values [12]), float.Parse(values [11]), float.Parse(values [10]), float.Parse(values [9]));
 			}
 		}
 	}
 
 	private IEnumerator GetElectrodeFileReader(string subjectName, string filename)
 	{
-		CoroutineWithData fileRequest = new CoroutineWithData (this, ObjSpawner.FileRequest (subjectName, filename));
+		CoroutineWithData fileRequest = new CoroutineWithData (this, RhinoRequestor.FileRequest (subjectName, filename));
 		Debug.Log ("Electrode coordinates received.");
 		yield return fileRequest.coroutine;
 		string csvText = System.Text.Encoding.Default.GetString((byte[])fileRequest.result);
