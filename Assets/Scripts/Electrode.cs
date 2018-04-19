@@ -45,6 +45,11 @@ public class Electrode : BrainWorldMonobehavior
 		tstatHFA = new_tstatHFA;
 	}
 
+	public bool GetSMEValuesSet()
+	{
+		return SME_values_set;
+	}
+
 	public float GetPValue110()
 	{
 		return pvalue110;

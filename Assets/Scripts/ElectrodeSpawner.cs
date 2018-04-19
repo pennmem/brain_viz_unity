@@ -125,9 +125,15 @@ public class ElectrodeSpawner : Spawner
 				//foreach (string key in electrodes.Keys)
 				//	Debug.Log (key);
 				//Debug.Log (values [0]);
-
-				Electrode thisElectrode = electrodes [values [0]];
-				thisElectrode.SetSMEValues (float.Parse(values [12]), float.Parse(values [11]), float.Parse(values [10]), float.Parse(values [9]));
+				if (electrodes.ContainsKey(values[0]))
+				{
+					Electrode thisElectrode = electrodes [values [0]];
+					thisElectrode.SetSMEValues (float.Parse(values [12]), float.Parse(values [11]), float.Parse(values [10]), float.Parse(values [9]));
+				}
+				else
+				{
+					Debug.LogWarning("An electrode found in target_selection_table was missing: " + values[0]);
+				}
 			}
 		}
 	}
@@ -150,6 +156,9 @@ public class ElectrodeSpawner : Spawner
 	{
 		foreach (Electrode electrode in electrodes.Values)
 		{
+			if (!electrode.GetSMEValuesSet ())
+				continue;
+
 			float valueInQuestion = 0f;
 			if (pValueTrueTStatFalse && oneTenTrueHFAFalse)
 				valueInQuestion = electrode.GetPValue110 ();

@@ -10,6 +10,11 @@ public class SMESlider : MonoBehaviour
 	public UnityEngine.UI.Dropdown whichFreqDropdown;
 	public ElectrodeSpawner electrodeSpawner;
 
+	void Start()
+	{
+		SetTextToMatchValue ();
+	}
+
 	public void UpdateSliderRange()
 	{
 		if (whichStatDropdown.value == 0)
