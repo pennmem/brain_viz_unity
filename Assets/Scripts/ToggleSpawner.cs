@@ -22,6 +22,8 @@ public class ToggleSpawner : Spawner
 			newToggle.GetComponentInChildren<UnityEngine.UI.Text> ().text = child.name;
 			newToggle.name = child.name + " toggle";
 			newToggle.transform.SetParent (gameObject.transform, false);
+			if (!newToggle.name.Contains("bipolar"))
+				newToggle.GetComponentInChildren<UnityEngine.UI.Toggle>().isOn = false;
 			i++;
 		}
 
