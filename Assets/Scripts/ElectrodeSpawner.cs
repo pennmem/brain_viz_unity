@@ -136,6 +136,9 @@ public class ElectrodeSpawner : Spawner
 				}
 			}
 		}
+
+		//due to weirdness, flip everything
+		gameObject.transform.localScale = new Vector3 (-gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
 	}
 
 	private IEnumerator GetElectrodeFileReader(string subjectName, string filename)

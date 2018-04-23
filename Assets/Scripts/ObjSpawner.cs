@@ -77,6 +77,9 @@ public class ObjSpawner : Spawner
 			
 		Debug.Log ("Load finished");
 
+		//due to weirdness, flip everything
+		gameObject.transform.localScale = new Vector3 (-gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+
 		hcp.SetActive (false);
 	}
 
