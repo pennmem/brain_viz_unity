@@ -13,7 +13,10 @@ public class StimSite : BrainWorldMonobehavior
 	public float negativeStimBlueThreshhold = -50f;
 	public float positiveStimRedThreshhold = 50f;
 
-	private const float MAGNITUDE_CUTOFF = 100f;
+	public float GetDeltaRecall()
+	{
+		return deltarec;
+	}
 
 	public void Initialize
 	(
@@ -42,11 +45,6 @@ public class StimSite : BrainWorldMonobehavior
 		);
 
 		gameObject.name = subject_id + " " + experiment;
-
-		if (gameObject.transform.position.sqrMagnitude > MAGNITUDE_CUTOFF * MAGNITUDE_CUTOFF)
-		{
-			gameObject.SetActive (false);
-		}
 	}
 
 	public override string InfoString()

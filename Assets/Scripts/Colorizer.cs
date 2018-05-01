@@ -36,7 +36,7 @@ public class Colorizer : MonoBehaviour
 		foreach (Renderer renderer in GetRenderers())
 		{
 			StandardShaderUtils.ChangeRenderMode(renderer.material, StandardShaderUtils.BlendMode.Transparent);
-			renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 0.2f);
+			renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 0.1f);
 		}
 	}
 

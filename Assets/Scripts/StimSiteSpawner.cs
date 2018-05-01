@@ -8,13 +8,17 @@ public class StimSiteSpawner : Spawner
 {
 	public GameObject stimSiteIndicatorPrefab;
 
+	private List<StimSite> stimSites = new List<StimSite> ();
+
+	private const float MAGNITUDE_CUTOFF = 100f;
+
 	public override IEnumerator Spawn(string subjectName)
 	{
 		CoroutineWithData getStimSiteCSVReader = new CoroutineWithData (this, GetStimSiteCSVReader(subjectName));
 		yield return getStimSiteCSVReader.coroutine;
 		using(System.IO.StringReader reader = (System.IO.StringReader)getStimSiteCSVReader.result)
 		{
-			List<StimSite> stimSites = new List<StimSite> ();
+			stimSites = new List<StimSite> ();
 
 			reader.ReadLine (); //discard the first line, which contains column names
 			string line;
@@ -37,7 +41,14 @@ public class StimSiteSpawner : Spawner
 					float.Parse (values [7])
 				);
 
-				stimSites.Add (stimSite);
+				if (stimSite.transform.position.sqrMagnitude > MAGNITUDE_CUTOFF * MAGNITUDE_CUTOFF)
+				{
+					Destroy (stimSite.gameObject);
+				}
+				else
+				{
+					stimSites.Add (stimSite);
+				}
 				indicator.transform.parent = gameObject.transform;
 			}
 		}
@@ -53,5 +64,13 @@ public class StimSiteSpawner : Spawner
 		yield return fileRequest.coroutine;
 		string csvText = System.Text.Encoding.Default.GetString((byte[])fileRequest.result);
 		yield return new System.IO.StringReader(csvText);
+	}
+
+	public void ShowStimSitesByDeltaRecall(float deltaRecallMinimum)
+	{
+		foreach (StimSite stimSite in stimSites)
+		{
+			stimSite.gameObject.SetActive (Mathf.Abs(stimSite.GetDeltaRecall ()) > deltaRecallMinimum);
+		}
 	}
 }
