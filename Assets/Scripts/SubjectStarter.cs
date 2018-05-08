@@ -10,10 +10,17 @@ public class SubjectStarter : MonoBehaviour
 	public GameObject inputUI;
 	public Colorizer colorizer;
 	public MonoBehaviour[] disableWhileLoading;
+	public UnityEngine.UI.Button goButton;
 
 	public void Go()
 	{
-		StartCoroutine (DoLoad ());
+		StartCoroutine (DoLoad());
+	}
+
+	public void GoAverageBrain()
+	{
+		subjectNameInput.text = "fsaverage_joel";
+		goButton.onClick.Invoke ();
 	}
 
 	private IEnumerator DoLoad()
@@ -24,7 +31,9 @@ public class SubjectStarter : MonoBehaviour
 		UnityEngine.UI.Text loadingtext = loadingMessage.GetComponentInChildren<UnityEngine.UI.Text> ();
 
 		string subjectName = subjectNameInput.text;
-		if (!(subjectName.Length == 6) || !subjectName [0].Equals ('R') || !subjectName [1].Equals ('1') || !char.IsUpper (subjectName [5]))
+		Debug.Log (subjectName);
+		bool average_brain = subjectName.Equals("fsaverage_joel");
+		if (!average_brain && (!(subjectName.Length == 6) || !subjectName [0].Equals ('R') || !subjectName [1].Equals ('1') || !char.IsUpper (subjectName [5])))
 		{
 			subjectNameInput.text = "INVALID";
 			yield break;
@@ -48,6 +57,9 @@ public class SubjectStarter : MonoBehaviour
 			loadingtext.text = "Spawning: " + spawner.gameObject.name;
 			yield return StartCoroutine(spawner.Spawn (subjectName));
 			Debug.Log (spawner.gameObject.name + " loaded: " +spawner.gameObject.transform.childCount);
+			//only do the first spawner on the list for the average brain
+			if (average_brain)
+				break;
 		}
 
 		loadingtext.text = "<b>Mouse over something to display info</b>";
