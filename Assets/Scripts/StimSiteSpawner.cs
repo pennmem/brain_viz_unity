@@ -36,7 +36,7 @@ public class StimSiteSpawner : Spawner
 					values [2],
 					float.Parse (values [3]),
 					bool.Parse (values [4]),
-					float.Parse (values [5]),
+					-float.Parse (values [5]), //weird flip
 					float.Parse (values [6]),
 					float.Parse (values [7])
 				);
@@ -52,9 +52,6 @@ public class StimSiteSpawner : Spawner
 				indicator.transform.parent = gameObject.transform;
 			}
 		}
-
-		//due to weirdness, flip everything
-		gameObject.transform.localScale = new Vector3 (-gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
 	}
 	
 

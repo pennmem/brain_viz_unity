@@ -15,6 +15,7 @@ public class ElectrodeSpawner : Spawner
 	private const int MICRO_CLUSTER_THRESHHOLD = 15;
 
 	private Dictionary<string, Electrode> electrodes = new Dictionary<string, Electrode> ();
+	private Dictionary<string, List<Electrode>> subjects_to_electrodes = new Dictionary<string, List<Electrode>> ();
 
 	public override IEnumerator Spawn(string subjectName)
 	{
@@ -48,7 +49,7 @@ public class ElectrodeSpawner : Spawner
 				(
 					values[0],
 					values[1],
-					float.Parse(values[2]),
+					-float.Parse(values[2]), //this is weirdly flipped
 					float.Parse(values[3]),
 					float.Parse(values[4]),
 					values[5],
@@ -56,6 +57,7 @@ public class ElectrodeSpawner : Spawner
 				);
 
 				electrodes.Add(values[0].ToUpper(), electrode);
+				subjects_to_electrodes [subjectName].Add (electrode);
 				indicator.transform.parent = atlasParents[atlas].transform;
 			}
 
@@ -136,9 +138,6 @@ public class ElectrodeSpawner : Spawner
 				}
 			}
 		}
-
-		//due to weirdness, flip everything
-		gameObject.transform.localScale = new Vector3 (-gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
 	}
 
 	private IEnumerator GetElectrodeFileReader(string subjectName, string filename)
@@ -176,5 +175,11 @@ public class ElectrodeSpawner : Spawner
 			else
 				electrode.gameObject.SetActive (valueInQuestion > value);
 		}
+	}
+
+	public void ShowElectrodesBySubject(string subject, bool show)
+	{
+		foreach (Electrode electrode in subjects_to_electrodes[subject])
+			electrode.gameObject.SetActive (show);
 	}
 }
