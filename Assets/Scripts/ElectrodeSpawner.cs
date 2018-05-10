@@ -177,11 +177,16 @@ public class ElectrodeSpawner : Spawner
 		}
 	}
 
-	public IEnumerator SpawnAllSubjects()
+	public void DoSpawnAllSubject()
+	{
+		StartCoroutine (SpawnAllSubjects ());
+	}
+
+	private IEnumerator SpawnAllSubjects()
 	{
 		CoroutineWithData subjectListRequest = new CoroutineWithData (this, RhinoRequestor.SubjectListRequest());
-		Debug.Log ("Electrode coordinates received.");
 		yield return subjectListRequest.coroutine;
+		Debug.Log ("Request all subject electrodes");
 		string csvText = System.Text.Encoding.Default.GetString((byte[])subjectListRequest.result);
 		string[] subjects = csvText.Split (',');
 		foreach (string subject in subjects)
