@@ -177,6 +177,19 @@ public class ElectrodeSpawner : Spawner
 		}
 	}
 
+	public IEnumerator SpawnAllSubjects()
+	{
+		CoroutineWithData subjectListRequest = new CoroutineWithData (this, RhinoRequestor.SubjectListRequest());
+		Debug.Log ("Electrode coordinates received.");
+		yield return subjectListRequest.coroutine;
+		string csvText = System.Text.Encoding.Default.GetString((byte[])subjectListRequest.result);
+		string[] subjects = csvText.Split (',');
+		foreach (string subject in subjects)
+		{
+			yield return Spawn (subject);
+		}
+	}
+
 	public void ShowElectrodesBySubject(string subject, bool show)
 	{
 		foreach (Electrode electrode in subjects_to_electrodes[subject])
