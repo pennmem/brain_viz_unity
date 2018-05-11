@@ -60,7 +60,7 @@ public static class RhinoRequestor
 		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + FILE_REQUEST_ENDPOINT + url_parameters);
 
 		request.SendWebRequest ();
-		Debug.Log ("Sending request to: " + request.url);
+		//Debug.Log ("Sending request to: " + request.url);
 		while (!request.downloadHandler.isDone)
 			yield return null;
 

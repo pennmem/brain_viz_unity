@@ -17,8 +17,14 @@ public class ElectrodeSpawner : Spawner
 	private Dictionary<string, Electrode> electrodes = new Dictionary<string, Electrode> ();
 	private Dictionary<string, List<Electrode>> subjects_to_electrodes = new Dictionary<string, List<Electrode>> ();
 
+	public List<string> GetSubjectList()
+	{
+		return new List<string>(subjects_to_electrodes.Keys);
+	}
+
 	public override IEnumerator Spawn(string subjectName)
 	{
+		subjects_to_electrodes.Add (subjectName, new List<Electrode> ());
 		CoroutineWithData getElectrodeCSVReader = new CoroutineWithData (this, GetElectrodeFileReader(subjectName, "electrode_coordinates.csv"));
 		yield return getElectrodeCSVReader.coroutine;
 		System.IO.TextReader reader = (System.IO.TextReader)getElectrodeCSVReader.result;
@@ -177,20 +183,14 @@ public class ElectrodeSpawner : Spawner
 		}
 	}
 
-	public void DoSpawnAllSubject()
-	{
-		StartCoroutine (SpawnAllSubjects ());
-	}
-
-	private IEnumerator SpawnAllSubjects()
+	public IEnumerator SpawnAllSubjects()
 	{
 		CoroutineWithData subjectListRequest = new CoroutineWithData (this, RhinoRequestor.SubjectListRequest());
 		yield return subjectListRequest.coroutine;
-		Debug.Log ("Request all subject electrodes");
-		string csvText = System.Text.Encoding.Default.GetString((byte[])subjectListRequest.result);
-		string[] subjects = csvText.Split (',');
+		string[] subjects = (string[])subjectListRequest.result;
 		foreach (string subject in subjects)
 		{
+			Debug.Log ("Spawning electrodes of: " + subject);
 			yield return Spawn (subject);
 		}
 	}
