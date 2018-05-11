@@ -16,6 +16,7 @@ public class SubjectSelector : MonoBehaviour
 		multisubjectSelection = newMultisubjectSelection;
 		index = newIndex;
 		subjectName = newName;
+		textDisplay.text = subjectName;
 	}
 
 	public string GetName()
@@ -25,12 +26,11 @@ public class SubjectSelector : MonoBehaviour
 
 	public void OnClick()
 	{
-		selectionIndicator.enabled = !selectionIndicator.enabled;
-		if (Input.GetKeyDown (KeyCode.LeftShift) || Input.GetKeyDown (KeyCode.RightShift))
-			multisubjectSelection.RangeSelect (index, selectionIndicator.enabled);
-		else if (Input.GetKeyDown (KeyCode.LeftControl) || Input.GetKeyDown (KeyCode.RightControl))
-			multisubjectSelection.AdditiveSelect (index, selectionIndicator.enabled);
-		else
+		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift))
+			multisubjectSelection.RangeSelect (index);
+		else if (Input.GetKey (KeyCode.LeftControl) || Input.GetKey (KeyCode.RightControl))
 			multisubjectSelection.SingleSelect (index, selectionIndicator.enabled);
+		else
+			multisubjectSelection.UniqueSelect (index);
 	}
 }

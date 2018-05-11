@@ -12,10 +12,10 @@ public class Electrode : BrainWorldMonobehavior
 	private bool isMicro = false;
 
 	private bool SME_values_set = false;
-	private float pvalue110;
-	private float tstat110;
-	private float pvalueHFA;
-	private float tstatHFA;
+	private float pvalue110 = 1f;
+	private float tstat110 = 5f;
+	private float pvalueHFA = 1f;
+	private float tstatHFA = 5f;
 
 	private const float POSITION_SCALING_FACTOR = 50f;
 
@@ -108,7 +108,9 @@ public class Electrode : BrainWorldMonobehavior
 
 		if (SME_values_set)
 			infoString = infoString + "\n" + "SME Stats: HFA p=" + pvalueHFA.ToString ("0.00") + ", HFA t=" +
-						 tstatHFA.ToString ("0.00") + ", 110Hz p=" + pvalue110.ToString ("0.00") + ", 110Hz t=" + tstat110.ToString ("0.00");
+			tstatHFA.ToString ("0.00") + ", 110Hz p=" + pvalue110.ToString ("0.00") + ", 110Hz t=" + tstat110.ToString ("0.00");
+		else
+			infoString = infoString + "\nSME data wasn't available for this electrode.";
 		return infoString;
 	}
 }

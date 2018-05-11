@@ -31,8 +31,6 @@ public class ElectrodeSpawner : Spawner
 
 		using(reader)
 		{
-			atlasParents = new Dictionary<string, GameObject> ();
-
 			reader.ReadLine (); //discard the first line, which contains column names
 			string line;
 			while ((line = reader.ReadLine()) != null)
@@ -61,8 +59,8 @@ public class ElectrodeSpawner : Spawner
 					values[5],
 					values[6]
 				);
-
-				electrodes.Add(values[0].ToUpper(), electrode);
+					
+				electrodes.Add(subjectName + values[0].ToUpper(), electrode);
 				subjects_to_electrodes [subjectName].Add (electrode);
 				indicator.transform.parent = atlasParents[atlas].transform;
 			}
@@ -130,12 +128,9 @@ public class ElectrodeSpawner : Spawner
 			{
 				string[] values = line.Split(',');
 
-				//foreach (string key in electrodes.Keys)
-				//	Debug.Log (key);
-				//Debug.Log (values [0]);
-				if (electrodes.ContainsKey(values[0]))
+				if (electrodes.ContainsKey(subjectName + values[0]))
 				{
-					Electrode thisElectrode = electrodes [values [0]];
+					Electrode thisElectrode = electrodes [subjectName + values [0]];
 					thisElectrode.SetSMEValues (float.Parse(values [12]), float.Parse(values [11]), float.Parse(values [10]), float.Parse(values [9]));
 				}
 				else
@@ -164,9 +159,6 @@ public class ElectrodeSpawner : Spawner
 	{
 		foreach (Electrode electrode in electrodes.Values)
 		{
-			if (!electrode.GetSMEValuesSet ())
-				continue;
-
 			float valueInQuestion = 0f;
 			if (pValueTrueTStatFalse && oneTenTrueHFAFalse)
 				valueInQuestion = electrode.GetPValue110 ();
@@ -197,6 +189,7 @@ public class ElectrodeSpawner : Spawner
 
 	public void ShowElectrodesBySubject(string subject, bool show)
 	{
+		Debug.Log (show);
 		foreach (Electrode electrode in subjects_to_electrodes[subject])
 			electrode.gameObject.SetActive (show);
 	}

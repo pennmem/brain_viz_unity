@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionIndicator: {fileID: 114371746400071094}
-  textDisplay: {fileID: 0}
+  textDisplay: {fileID: 114836193462905048}
 --- !u!114 &114371746400071094
 MonoBehaviour:
   m_ObjectHideFlags: 1

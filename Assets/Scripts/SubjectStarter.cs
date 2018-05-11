@@ -6,6 +6,7 @@ public class SubjectStarter : MonoBehaviour
 {
 	public UnityEngine.UI.InputField subjectNameInput;
 	public Spawner[] spawners;
+	public Spawner[] averageBrainSpawners;
 	public GameObject loadingMessage;
 	public GameObject inputUI;
 	public Colorizer colorizer;
@@ -42,7 +43,10 @@ public class SubjectStarter : MonoBehaviour
 		loadingMessage.SetActive (true);
 		loadingMessage.GetComponentInChildren<UnityEngine.UI.Text> ().text = "<b>Loading . . .</b>";
 
-		foreach (Spawner spawner in spawners)
+		List<Spawner> all_spawners = new List<Spawner> ();
+		all_spawners.AddRange (spawners);
+		all_spawners.AddRange (averageBrainSpawners);
+		foreach (Spawner spawner in all_spawners)
 		{
 			loadingtext.text = "Despawning: " + spawner.gameObject.name;
 			spawner.Despawn ();
@@ -51,15 +55,25 @@ public class SubjectStarter : MonoBehaviour
 		inputUI.SetActive (false);
 		yield return null;
 
-		foreach (Spawner spawner in spawners)
+		if (average_brain)
 		{
-			spawner.gameObject.SetActive (true);
-			loadingtext.text = "Spawning: " + spawner.gameObject.name;
-			yield return StartCoroutine(spawner.Spawn (subjectName));
-			Debug.Log (spawner.gameObject.name + " loaded: " +spawner.gameObject.transform.childCount);
-			//only do the first spawner on the list for the average brain
-			if (average_brain)
-				break;
+			foreach (Spawner spawner in averageBrainSpawners)
+			{
+				spawner.gameObject.SetActive (true);
+				loadingtext.text = "Spawning: " + spawner.gameObject.name;
+				yield return StartCoroutine (spawner.Spawn (subjectName));
+				Debug.Log (spawner.gameObject.name + " loaded: " + spawner.gameObject.transform.childCount);
+			}
+		}
+		else
+		{
+			foreach (Spawner spawner in spawners)
+			{
+				spawner.gameObject.SetActive (true);
+				loadingtext.text = "Spawning: " + spawner.gameObject.name;
+				yield return StartCoroutine (spawner.Spawn (subjectName));
+				Debug.Log (spawner.gameObject.name + " loaded: " + spawner.gameObject.transform.childCount);
+			}
 		}
 
 		loadingtext.text = "<b>Mouse over something to display info</b>";
