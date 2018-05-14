@@ -38,6 +38,7 @@ public class MultisubjectSelection : Spawner
 
 	public void UniqueSelect(int index)
 	{
+		Debug.Log ("unqiue");
 		for (int i = 0; i < selectors.Length; i++)
 		{
 			if (i == index)
@@ -49,6 +50,7 @@ public class MultisubjectSelection : Spawner
 
 	public void RangeSelect(int index)
 	{
+		Debug.Log ("range");
 		if (index >= last_clicked)
 		{
 			for (int i = 0; i <= index; i++)

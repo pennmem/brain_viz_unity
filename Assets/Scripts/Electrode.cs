@@ -5,6 +5,7 @@ using UnityEngine;
 public class Electrode : BrainWorldMonobehavior
 {
 
+	private string subject_name;
 	private string contact_name;
 	private string contact_type;
 	private string atlas;
@@ -13,14 +14,15 @@ public class Electrode : BrainWorldMonobehavior
 
 	private bool SME_values_set = false;
 	private float pvalue110 = 1f;
-	private float tstat110 = 5f;
+	private float tstat110 = -5f;
 	private float pvalueHFA = 1f;
-	private float tstatHFA = 5f;
+	private float tstatHFA = -5f;
 
 	private const float POSITION_SCALING_FACTOR = 50f;
 
-	public void Initialize(string new_contact_name, string new_contact_type, float new_x, float new_y, float new_z, string new_atlas, string new_orient_to)
+	public void Initialize(string new_subject_name, string new_contact_name, string new_contact_type, float new_x, float new_y, float new_z, string new_atlas, string new_orient_to)
 	{
+		subject_name = new_subject_name;
 		contact_name = new_contact_name;
 		gameObject.name = contact_name;
 		contact_type = new_contact_type;
@@ -43,11 +45,6 @@ public class Electrode : BrainWorldMonobehavior
 		tstat110 = new_tstat110;
 		pvalueHFA = new_pvalueHFA;
 		tstatHFA = new_tstatHFA;
-	}
-
-	public bool GetSMEValuesSet()
-	{
-		return SME_values_set;
 	}
 
 	public float GetPValue110()
@@ -100,7 +97,7 @@ public class Electrode : BrainWorldMonobehavior
 				contact_type_full = "Grid";
 				break;
 		}
-		string infoString = "<b>Contact:</b> " + contact_name + "\n" + contact_type_full + ", " + atlas + " atlas";
+		string infoString = "<b>Contact:</b> " + subject_name + " " + contact_name + "\n" + contact_type_full + ", " + atlas + " atlas";
 		if (isMicro)
 		{
 			infoString = infoString + ". This is a micro contact.";
