@@ -9,6 +9,7 @@ public static class RhinoRequestor
 	private static string FILE_REQUEST_ENDPOINT = "/api/v1/data/brain/vizdata/";
 	private static string OBJ_LIST_ENDPOINT = "/api/v1/data/brain/list_brain_objs/";
 	private static string SUBJECT_LIST_ENDPOINT = "/api/v1/data/brain/list_viz_subjects/";
+	private static string ELECTRODE_ENDPOINT = "/api/v1/data/brain/electrodes/";
 
 	private static void CheckRhinoAddress()
 	{
@@ -65,5 +66,21 @@ public static class RhinoRequestor
 			yield return null;
 
 		yield return request.downloadHandler.data;
+	}
+
+	public static IEnumerator ElectrodeRequest(string subjectName)
+	{
+		CheckRhinoAddress ();
+
+		string url_parameters = "?subject=" + subjectName;
+
+		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + ELECTRODE_ENDPOINT + url_parameters);
+
+		request.SendWebRequest ();
+		Debug.Log ("Sending request to: " + request.url);
+		while (!request.downloadHandler.isDone)
+			yield return null;
+
+		yield return request.downloadHandler.text;
 	}
 }

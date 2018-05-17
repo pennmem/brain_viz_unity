@@ -141,9 +141,9 @@ public class ElectrodeSpawner : Spawner
 
 	private IEnumerator GetElectrodeFileReader(string subjectName, string filename)
 	{
-		CoroutineWithData fileRequest = new CoroutineWithData (this, RhinoRequestor.FileRequest (subjectName, filename));
+		CoroutineWithData fileRequest = new CoroutineWithData (this, RhinoRequestor.ElectrodeRequest (subjectName));
 		yield return fileRequest.coroutine;
-		string csvText = System.Text.Encoding.Default.GetString((byte[])fileRequest.result);
+		string csvText = (string)fileRequest.result;
 		yield return new System.IO.StringReader(csvText);
 	}
 
