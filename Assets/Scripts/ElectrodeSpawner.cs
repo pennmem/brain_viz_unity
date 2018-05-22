@@ -22,7 +22,7 @@ public class ElectrodeSpawner : Spawner
 		return new List<string>(subjects_to_electrodes.Keys);
 	}
 
-	public override IEnumerator Spawn(string subjectName)
+	public override IEnumerator Spawn(string subjectName, bool average_brain = false)
 	{
 		subjects_to_electrodes.Add (subjectName, new List<Electrode> ());
 		subjects_enabled.Add (subjectName, true);
@@ -36,12 +36,18 @@ public class ElectrodeSpawner : Spawner
 		string line;
 		while ((line = reader.ReadLine()) != null)
 		{
-			GameObject indicator = Instantiate (electrodeIndicatorPrefab);
-			Electrode electrode = indicator.GetComponent<Electrode> ();
-
 			string[] values = line.Split(',');
 
 			string atlas = values [5];
+
+			if (average_brain && !atlas.Equals ("avg.corrected"))
+				continue;
+			else if (!average_brain && !atlas.Equals ("ind.corrected"))
+				continue;
+
+			GameObject indicator = Instantiate (electrodeIndicatorPrefab);
+			Electrode electrode = indicator.GetComponent<Electrode> ();
+
 			if (!atlasParents.ContainsKey (atlas))
 			{
 				GameObject newAtlasParent = new GameObject ();
@@ -55,16 +61,33 @@ public class ElectrodeSpawner : Spawner
 				subjectName,
 				values[0],
 				values[1],
-				-float.Parse(values[2]), //this is weirdly flipped
-				float.Parse(values[3]),
-				float.Parse(values[4]),
+				-float.Parse(values[2]) * 0.02f, //this is weirdly flipped
+				float.Parse(values[3]) * 0.02f, //and these are all in wrong units, so must be scaled
+				float.Parse(values[4]) * 0.02f,
 				values[5],
-				StandardizeElectrodeName(subjectName, values[6])
+				StandardizeElectrodeName(atlas, subjectName, values[6])
 			);
-				
-			electrodes.Add(StandardizeElectrodeName(subjectName, values[0]), electrode);
+
+			string standardized_name = StandardizeElectrodeName (atlas, subjectName, values [0]);
+			if (!electrodes.ContainsKey (standardized_name))
+			{
+				electrodes.Add (standardized_name, electrode);
+			}
+			else
+			{
+				Destroy (indicator);
+				continue;
+			}
 			subjects_to_electrodes [subjectName].Add (electrode);
 			indicator.transform.parent = atlasParents[atlas].transform;
+
+			electrode.SetSMEValues
+			(
+				float.Parse(values [10]),
+				float.Parse(values [9]),
+				float.Parse(values [8]),
+				float.Parse(values [7])
+			);
 		}
 
 		///////orientation and micro detection////////
@@ -116,27 +139,7 @@ public class ElectrodeSpawner : Spawner
 			micro.transform.localScale = micro.transform.localScale * MICRO_SHRINK;
 			micro.GetComponent<Renderer> ().material.color = Color.black;
 		}
-
-		getElectrodeCSVReader = new CoroutineWithData (this, GetElectrodeFileReader(subjectName, "target_selection_table"));
-		yield return getElectrodeCSVReader.coroutine;
-		reader = (System.IO.TextReader)getElectrodeCSVReader.result;
-
-		reader.ReadLine (); //discard the first line, which contains column names
-		while ((line = reader.ReadLine ()) != null)
-		{
-			string[] values = line.Split(',');
-
-			string electrodes_key = StandardizeElectrodeName(subjectName, values[0]);
-			if (electrodes.ContainsKey(electrodes_key))
-			{
-				Electrode thisElectrode = electrodes [electrodes_key];
-				thisElectrode.SetSMEValues (float.Parse(values [12]), float.Parse(values [11]), float.Parse(values [10]), float.Parse(values [9]));
-			}
-			else
-			{
-				Debug.LogWarning("An electrode found in target_selection_table was missing: " + values[0]);
-			}
-		}
+			
 	}
 
 	private IEnumerator GetElectrodeFileReader(string subjectName, string filename)
@@ -178,7 +181,7 @@ public class ElectrodeSpawner : Spawner
 		}
 	}
 
-	public IEnumerator SpawnAllSubjects()
+	public IEnumerator SpawnAllSubjects(bool average_brain)
 	{
 		CoroutineWithData subjectListRequest = new CoroutineWithData (this, RhinoRequestor.SubjectListRequest());
 		yield return subjectListRequest.coroutine;
@@ -186,7 +189,7 @@ public class ElectrodeSpawner : Spawner
 		foreach (string subject in subjects)
 		{
 			Debug.Log ("Spawning electrodes of: " + subject);
-			yield return Spawn (subject);
+			yield return Spawn (subject, average_brain: average_brain);
 		}
 	}
 
@@ -206,9 +209,9 @@ public class ElectrodeSpawner : Spawner
 	/// </summary>
 	/// <returns>The electrode name.</returns>
 	/// <param name="electrodeName">Electrode name.</param>
-	private string StandardizeElectrodeName(string subjectName, string electrodeName)
+	private string StandardizeElectrodeName(string atlas, string subjectName, string electrodeName)
 	{
-		return subjectName + StandardizeElectrodeNameOnly (electrodeName);
+		return atlas + subjectName + StandardizeElectrodeNameOnly (electrodeName);
 	}
 
 	private string StandardizeElectrodeNameOnly (string electrodeName)

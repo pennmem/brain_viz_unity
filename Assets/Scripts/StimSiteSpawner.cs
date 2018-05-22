@@ -12,7 +12,7 @@ public class StimSiteSpawner : Spawner
 
 	private const float MAGNITUDE_CUTOFF = 100f;
 
-	public override IEnumerator Spawn(string subjectName)
+	public override IEnumerator Spawn(string subjectName, bool average_brain = false)
 	{
 		CoroutineWithData getStimSiteCSVReader = new CoroutineWithData (this, GetStimSiteCSVReader(subjectName));
 		yield return getStimSiteCSVReader.coroutine;

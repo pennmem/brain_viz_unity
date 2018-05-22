@@ -42,7 +42,7 @@ public class ObjSpawner : Spawner
 			hcpRightParent.SetActive(active);
 	}
 
-	public override IEnumerator Spawn(string subjectName)
+	public override IEnumerator Spawn(string subjectName, bool average_brain = false)
 	{
 		hcp = new GameObject ("hcp");
 		hcp.transform.parent = gameObject.transform;

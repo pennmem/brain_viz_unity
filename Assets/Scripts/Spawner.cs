@@ -13,6 +13,6 @@ public abstract class Spawner : MonoBehaviour
 		}
 	}
 
-	public abstract IEnumerator Spawn (string subjectName);
+	public abstract IEnumerator Spawn (string subjectName, bool average_brain = false);
 
 }

@@ -7,7 +7,7 @@ public class ToggleSpawner : Spawner
 	public GameObject toggle;
 	public float spacing = 0.1f;
 
-	public override IEnumerator Spawn(string subjectName)
+	public override IEnumerator Spawn(string subjectName, bool average_brain = false)
 	{
 		int i = 0;
 		foreach(string atlas_name in ElectrodeSpawner.GetAtlasParentDict().Keys)

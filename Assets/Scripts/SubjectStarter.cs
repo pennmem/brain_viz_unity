@@ -61,7 +61,7 @@ public class SubjectStarter : MonoBehaviour
 			{
 				spawner.gameObject.SetActive (true);
 				loadingtext.text = "Spawning: " + spawner.gameObject.name;
-				yield return StartCoroutine (spawner.Spawn (subjectName));
+				yield return StartCoroutine (spawner.Spawn (subjectName, average_brain: true));
 				Debug.Log (spawner.gameObject.name + " loaded: " + spawner.gameObject.transform.childCount);
 			}
 		}

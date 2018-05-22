@@ -11,9 +11,9 @@ public class MultisubjectSelection : Spawner
 	private SubjectSelector[] selectors;
 	private int last_clicked = 0;
 
-	public override IEnumerator Spawn(string subjectName)
+	public override IEnumerator Spawn(string subjectName, bool average_brain = false)
 	{
-		yield return electrodeSpawner.SpawnAllSubjects ();
+		yield return electrodeSpawner.SpawnAllSubjects (average_brain);
 		List<string> subjects = electrodeSpawner.GetSubjectList ();
 		selectors = new SubjectSelector[subjects.Count];
 		Debug.Log (subjects.Count);
