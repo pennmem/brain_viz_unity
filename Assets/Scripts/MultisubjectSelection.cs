@@ -29,37 +29,44 @@ public class MultisubjectSelection : Spawner
 		}
 	}
 
-	public void SingleSelect(int index, bool select)
+	private void Select(int index, bool select)
 	{
 		selectors[index].selectionIndicator.enabled = select;
 		electrodeSpawner.ShowElectrodesBySubject (selectors[index].GetName(), select);
+	}
+
+	public void SingleSelect(int index, bool select)
+	{
+		Select (index, select);
 		last_clicked = index;
 	}
 
 	public void UniqueSelect(int index)
 	{
-		Debug.Log ("unqiue");
 		for (int i = 0; i < selectors.Length; i++)
 		{
 			if (i == index)
-				SingleSelect (i, true);
+			{
+				Select (i, true);
+			}
 			else
-				SingleSelect (i, false);
+				Select (i, false);
 		}
+		last_clicked = index;
 	}
 
 	public void RangeSelect(int index)
 	{
-		Debug.Log ("range");
 		if (index >= last_clicked)
 		{
-			for (int i = 0; i <= index; i++)
-				SingleSelect (i, true);
+			for (int i = last_clicked; i <= index; i++)
+				Select (i, true);
 		}
 		else
 		{
-			for (int i = index; i >= index; i--)
-				SingleSelect (i, true);
+			for (int i = last_clicked; i >= index; i--)
+				Select (i, true);
 		}
+		last_clicked = index;
 	}
 }

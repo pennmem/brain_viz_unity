@@ -29,7 +29,7 @@ public class SubjectSelector : MonoBehaviour
 		if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift))
 			multisubjectSelection.RangeSelect (index);
 		else if (Input.GetKey (KeyCode.LeftControl) || Input.GetKey (KeyCode.RightControl))
-			multisubjectSelection.SingleSelect (index, selectionIndicator.enabled);
+			multisubjectSelection.SingleSelect (index, !selectionIndicator.enabled);
 		else
 			multisubjectSelection.UniqueSelect (index);
 	}
