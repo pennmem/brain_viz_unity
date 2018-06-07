@@ -10,7 +10,7 @@ public class CreateAssetBundles : MonoBehaviour
 	{
 		ObjSpawner objSpawner = GameObject.FindObjectOfType<ObjSpawner>();
 
-		string[] subjects = new string[] { "R1404E" }; //RhinoRequestor.EditorSubjectListRequest();
+		string[] subjects = new string[] { "fsaverage_joel" }; //RhinoRequestor.EditorSubjectListRequest();
 		foreach (string subject in subjects)
 		{
 			Debug.Log ("Spawning objs of: " + subject);
@@ -27,7 +27,7 @@ public class CreateAssetBundles : MonoBehaviour
 			System.IO.Directory.CreateDirectory(assetBundleDirectory);
 		}
 
-		BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.None, BuildTarget.StandaloneOSX);
+		BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.None, BuildTarget.WebGL);
 	}
 
 	[MenuItem("Assets/CreatePrefabFromSelected")]
