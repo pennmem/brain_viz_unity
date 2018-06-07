@@ -6,8 +6,6 @@ public class ElectrodeSpawner : Spawner
 {
 	public GameObject electrodeIndicatorPrefab;
 
-	private static Dictionary<string, GameObject> atlasParents = new Dictionary<string, GameObject> ();
-
 	private const float NEARBY_THRESHHOLD = 5f;
 	private const float TOO_CLOSE = 0.001f;
 	private const float MICRO_JITTER = 1f;
@@ -30,6 +28,7 @@ public class ElectrodeSpawner : Spawner
 		yield return getElectrodeCSVReader.coroutine;
 		System.IO.TextReader reader = (System.IO.TextReader)getElectrodeCSVReader.result;
 
+		Dictionary<string, GameObject> atlasParents = new Dictionary<string, GameObject> ();
 		Dictionary<string, Electrode> electrodes = new Dictionary<string, Electrode> ();
 
 		reader.ReadLine (); //discard the first line, which contains column names
@@ -148,11 +147,6 @@ public class ElectrodeSpawner : Spawner
 		yield return fileRequest.coroutine;
 		string csvText = (string)fileRequest.result;
 		yield return new System.IO.StringReader(csvText);
-	}
-
-	public static Dictionary<string, GameObject> GetAtlasParentDict()
-	{
-		return atlasParents;
 	}
 
 	public void ShowElectrodesByStat (bool pValueTrueTStatFalse, bool oneTenTrueHFAFalse, float value)

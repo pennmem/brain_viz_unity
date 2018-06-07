@@ -12,7 +12,6 @@ public class ObjSpawner : Spawner
 	private GameObject hcpLeftParent;
 	private GameObject hcpRightParent;
 
-	public GameObject popupPrefab;
 	public Material brainMaterial;
 	public UnityEngine.UI.Text loadingText;
 
@@ -42,12 +41,41 @@ public class ObjSpawner : Spawner
 			hcpRightParent.SetActive(active);
 	}
 
-	public override IEnumerator Spawn(string subjectName, bool average_brain = false)
+	public override IEnumerator Spawn(string subject, bool average_brain = false)
 	{
+		CoroutineWithData subjectListRequest = new CoroutineWithData (this, RhinoRequestor.AssetBundleRequest(subject));
+		yield return subjectListRequest.coroutine;
+		if (subjectListRequest.result == null)
+		{
+			loadingText.text = "AssetBundle not found. Performign alternative (slower) load. Please wait.";
+			yield return null;
+			EditorSpawn (subject, average_brain);
+			yield break;
+		}
+		AssetBundle bundle = (AssetBundle)subjectListRequest.result;
+		GameObject brainPrefab = bundle.LoadAsset<GameObject>(subject);
+		GameObject brain = Instantiate (brainPrefab);
+		brain.transform.parent = gameObject.transform;
+		dk = brain.transform.GetChild (1).gameObject;
+		hcp = brain.transform.GetChild (0).gameObject;
+		dkLeftParent = dk.transform.GetChild (0).gameObject;
+		dkRightParent = dk.transform.GetChild (1).gameObject;
+		hcpLeftParent = hcp.transform.GetChild (0).gameObject;
+		hcpRightParent = hcp.transform.GetChild (1).gameObject;
+
+		hcp.SetActive (false);
+	}
+
+	public void EditorSpawn(string subjectName, bool average_brain = false)
+	{
+		float startTime = Time.time;
+
+		GameObject subject = new GameObject (subjectName);
+		subject.transform.parent = gameObject.transform;
 		hcp = new GameObject ("hcp");
-		hcp.transform.parent = gameObject.transform;
+		hcp.transform.parent = subject.transform;
 		dk = new GameObject ("dk");
-		dk.transform.parent = gameObject.transform;
+		dk.transform.parent = subject.transform;
 		dkLeftParent = new GameObject ("dk left");
 		dkLeftParent.transform.parent = dk.transform;
 		dkRightParent = new GameObject ("dk right");
@@ -57,16 +85,15 @@ public class ObjSpawner : Spawner
 		hcpRightParent = new GameObject ("hcp right");
 		hcpRightParent.transform.parent = hcp.transform;
 
-		//BUILD NAME TO OBJ DICT
-		CoroutineWithData objFilePathListRequest = new CoroutineWithData (this, RhinoRequestor.ObjFilePathListRequest (subjectName));
-		yield return objFilePathListRequest.coroutine;
-		string[] filenames = (string[])objFilePathListRequest.result;
+		string[] filenames = (string[])RhinoRequestor.EditorObjFilePathListRequest (subjectName);
+		Debug.Log (filenames.Length);
 		foreach (string filename in filenames)
 		{
 			if (System.IO.Path.GetExtension (filename).Equals (".obj"))
 			{
-				loadingText.text = "Downloading: " + filename;
-				yield return StartCoroutine(FileRequestToObj (subjectName, filename));
+				if (loadingText != null)
+					loadingText.text = "Downloading: " + filename;
+				FileRequestToObj (subjectName, filename);
 			}
 			else
 			{
@@ -75,7 +102,7 @@ public class ObjSpawner : Spawner
 			}
 		}
 			
-		Debug.Log ("Load finished");
+		Debug.Log ("Load finished: " + (Time.time - startTime).ToString());
 
 		//due to weirdness, flip everything
 		gameObject.transform.localScale = new Vector3 (-gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
@@ -98,7 +125,6 @@ public class ObjSpawner : Spawner
 		clickOutline.color = 1;
 		clickOutline.enabled = false;
 		importantChild.GetComponent<MouseOverOutline> ().clickOutline = clickOutline;
-		importantChild.GetComponent<MouseOverOutline> ().popupInfoPrefab = popupPrefab;
 		importantChild.AddComponent<BrainPiece> ();
 		importantChild.name = targetObject.name;
 
@@ -142,11 +168,9 @@ public class ObjSpawner : Spawner
 		return targetObject;
 	}
 
-	private IEnumerator FileRequestToObj(string subjectName, string fileName)
+	private void FileRequestToObj(string subjectName, string fileName)
 	{
-		CoroutineWithData objRequest = new CoroutineWithData (this, RhinoRequestor.FileRequest (subjectName, fileName));
-		yield return objRequest.coroutine;
-		byte[] objData = (byte[])objRequest.result;
+		byte[] objData = (byte[])RhinoRequestor.EditorFileRequest (subjectName, fileName);
 		//Debug.Log (fileName + ": " + objData.Length.ToString());
 		BuildBrainPiece(objData, fileName);
 	}

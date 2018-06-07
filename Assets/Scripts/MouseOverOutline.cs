@@ -8,8 +8,12 @@ public class MouseOverOutline : MonoBehaviour
 	public cakeslice.Outline clickOutline;
 	public GameObject popupInfoPrefab;
 
+	private PopupMaker popupMaker;
+
 	void Start()
 	{
+		popupMaker = FindObjectOfType<PopupMaker> ();
+
 		outline.enabled = false;
 	}
 
@@ -34,7 +38,7 @@ public class MouseOverOutline : MonoBehaviour
 
 	private void SpawnInfoWindow()
 	{
-		GameObject infoWindowCanvas = Instantiate (popupInfoPrefab);
+		GameObject infoWindowCanvas = popupMaker.MakePopup ();
 		GameObject infoWindow = infoWindowCanvas.transform.GetChild(0).gameObject;
 		infoWindow.GetComponentInChildren<UnityEngine.UI.Text> ().text = gameObject.GetComponent<BrainWorldMonobehavior> ().InfoString ();
 		infoWindow.GetComponentInChildren<PopupWindow> ().disableMe = clickOutline;

@@ -83,4 +83,66 @@ public static class RhinoRequestor
 
 		yield return request.downloadHandler.text;
 	}
+
+	public static IEnumerator AssetBundleRequest(string subjectName)
+	{
+		CheckRhinoAddress ();
+
+		string url_parameters = "?subject=" + subjectName + "&static_file=assetBundle";
+
+		var request = UnityEngine.Networking.UnityWebRequest.GetAssetBundle(RHINO_ADDRESS + FILE_REQUEST_ENDPOINT + url_parameters);
+
+		request.SendWebRequest ();
+		//Debug.Log ("Sending request to: " + request.url);
+		while (!request.downloadHandler.isDone)
+			yield return null;
+
+		yield return UnityEngine.Networking.DownloadHandlerAssetBundle.GetContent(request);
+	}
+
+	public static string[] EditorObjFilePathListRequest(string subjectName)
+	{
+		CheckRhinoAddress ();
+
+		string url_parameters = "?subject=" + subjectName;
+
+		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + OBJ_LIST_ENDPOINT + url_parameters);
+
+		request.SendWebRequest ();
+		Debug.Log ("Sending request to: " + request.url);
+		while (!request.downloadHandler.isDone)
+			;
+
+		return request.downloadHandler.text.Split(',');	
+	}
+
+	public static string[] EditorSubjectListRequest()
+	{
+		CheckRhinoAddress ();
+
+		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + SUBJECT_LIST_ENDPOINT);
+
+		request.SendWebRequest ();
+		Debug.Log ("Sending request to: " + request.url);
+		while (!request.downloadHandler.isDone)
+			;
+
+		return request.downloadHandler.text.Split(',');	
+	}
+
+	public static byte[] EditorFileRequest(string subjectName, string fileName)
+	{
+		CheckRhinoAddress ();
+
+		string url_parameters = "?subject=" + subjectName + "&static_file=" + fileName;
+
+		var request = UnityEngine.Networking.UnityWebRequest.Get(RHINO_ADDRESS + FILE_REQUEST_ENDPOINT + url_parameters);
+
+		request.SendWebRequest ();
+		//Debug.Log ("Sending request to: " + request.url);
+		while (!request.downloadHandler.isDone)
+			;
+
+		return request.downloadHandler.data;
+	}
 }
