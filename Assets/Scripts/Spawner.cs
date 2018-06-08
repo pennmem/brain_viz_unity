@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Spawner : MonoBehaviour
 {
 
-	public void Despawn()
+	public virtual void Despawn()
 	{
 		while (gameObject.transform.childCount > 0)
 		{

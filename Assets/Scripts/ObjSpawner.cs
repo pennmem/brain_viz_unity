@@ -15,6 +15,8 @@ public class ObjSpawner : Spawner
 	public Material brainMaterial;
 	public UnityEngine.UI.Text loadingText;
 
+	private AssetBundle currentBundle;
+
 	public void SetDKActive(bool active)
 	{
 		dk.SetActive(active);
@@ -63,7 +65,17 @@ public class ObjSpawner : Spawner
 		hcpLeftParent = hcp.transform.GetChild (0).gameObject;
 		hcpRightParent = hcp.transform.GetChild (1).gameObject;
 
+		currentBundle = bundle;
+
 		hcp.SetActive (false);
+	}
+
+	public override void Despawn()
+	{
+		base.Despawn ();
+
+		if (currentBundle != null)
+			currentBundle.Unload (true);
 	}
 
 	public void EditorSpawn(string subjectName, bool average_brain = false)

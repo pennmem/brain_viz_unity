@@ -20,6 +20,14 @@ public class ElectrodeSpawner : Spawner
 		return new List<string>(subjects_to_electrodes.Keys);
 	}
 
+	public override void Despawn()
+	{
+		base.Despawn ();
+
+		subjects_to_electrodes = new Dictionary<string, List<Electrode>> ();
+		subjects_enabled = new Dictionary<string, bool> ();
+	}
+
 	public override IEnumerator Spawn(string subjectName, bool average_brain = false)
 	{
 		subjects_to_electrodes.Add (subjectName, new List<Electrode> ());
