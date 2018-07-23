@@ -5,28 +5,19 @@ using System.Collections;
 
 public class CreateAssetBundles : MonoBehaviour
 {
-    //Step 1: Download Brains
-    //Step 2: Create prefabs of the brains you want to make asset bundles for
-    //Step 3: Build prefabs into asset bundles
+    //Step 1: Download Brains.  Do this in a scene with an objSpawner, and note that downloading all brains will take a while.  The editor is single threaded and will freeze while downloading- you can check progress by looking at requests on the server.
+    //Step 2: Create prefabs of the brains you want to make asset bundles for.  Do this by selecting the downloaded brains in the scene first.
+    //Step 3: Build prefabs into asset bundles.  This will automatically build all assets bundles.  Prefabs will already have been added to the correct asset bundle.  This is fast-ish.
 
     //step 1
-	[MenuItem("Assets/DownloadBrains")]
-	static void DownloadBrains()
-	{
-		ObjSpawner objSpawner = GameObject.FindObjectOfType<ObjSpawner>();
+    [MenuItem("Assets/DownloadBrains")]
+    static void DownloadBrains()
+    {
+        //Use this is a scene with an objSpawner
+        ObjSpawner objSpawner = FindObjectOfType<ObjSpawner>();
 
         //THE BRAINS YOU WANT TO DOWNLOAD
-        string[] subjects = new string[] { "R1417T",
-                                           "R1420T",
-                                           "R1421M",
-                                           "R1422T",
-                                           "R1423E",
-                                           "R1425D",
-                                           "R1426N",
-                                           "R1427T",
-                                           "R1428T",
-                                           "R1431J",
-                                           "R1432N", }; //RhinoRequestor.EditorSubjectListRequest(); for all brains
+        string[] subjects = RhinoRequestor.EditorSubjectListRequest(); //for all brains, can also be picked individually by making this some other array of strings.
 
 		foreach (string subject in subjects)
 		{
