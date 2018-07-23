@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//by Ted Bigham
+/// <summary>
+/// I did not write this.  Ted Bigham wrote this.
+/// 
+/// It it a wrapper for a coroutine that makes it easier to return some data from the coroutine after it's finished.
+/// </summary>
 public class CoroutineWithData
 {
 	public Coroutine coroutine { get; private set; }

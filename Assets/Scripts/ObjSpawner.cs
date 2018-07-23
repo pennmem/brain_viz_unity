@@ -43,7 +43,12 @@ public class ObjSpawner : Spawner
 			hcpRightParent.SetActive(active);
 	}
 
-    //spawns the brain for one subject- this may be "fsaverage_joel", the average brain.
+    /// <summary>
+    /// Spawns the brain for one subject- this may be "fsaverage_joel", the average brain.  This will try to use assetBundles and call ObjSpawn if it can't.
+    /// </summary>
+    /// <returns>The spawn.</returns>
+    /// <param name="subject">Subject.</param>
+    /// <param name="average_brain">If set to <c>true</c> average brain.</param>
 	public override IEnumerator Spawn(string subject, bool average_brain = false)
 	{
 		CoroutineWithData subjectListRequest = new CoroutineWithData (this, RhinoRequestor.AssetBundleRequest(subject));
@@ -52,7 +57,7 @@ public class ObjSpawner : Spawner
 		if (subjectListRequest.result == null)
 		{
 			loadingText.text = "AssetBundle not found. Performing alternative (slower) load. Please wait.";
-			yield return ObjSpawn (subject, average_brain);
+			ObjSpawn (subject, average_brain);
 			yield break;
 		}
 		AssetBundle bundle = (AssetBundle)subjectListRequest.result;
@@ -82,9 +87,13 @@ public class ObjSpawner : Spawner
 			currentBundle.Unload (true);
 	}
 
-    //this performs the load from Objs instead of an .assetBundle
-    //it is used in case no .assetBundle exists and by CreateAssetBundles to create the asset bundles in the first place.
-	public IEnumerator ObjSpawn(string subjectName, bool average_brain = false)
+    /// <summary>
+    /// this performs the load from Objs instead of an .assetBundle
+    /// it is used in case no .assetBundle exists and by CreateAssetBundles to create the asset bundles in the first place.
+    /// </summary>
+    /// <param name="subjectName">Subject name.</param>
+    /// <param name="average_brain">If set to <c>true</c> average brain.</param>
+	public void ObjSpawn(string subjectName, bool average_brain = false)
 	{
 		float startTime = Time.time;
 
@@ -103,17 +112,17 @@ public class ObjSpawner : Spawner
 		hcpRightParent = new GameObject ("hcp right");
 		hcpRightParent.transform.parent = hcp.transform;
 
-		CoroutineWithData objListRequest = new CoroutineWithData (this, RhinoRequestor.ObjFilePathListRequest (subjectName));
-		yield return objListRequest.coroutine;
-		string[] filenames = (string[])objListRequest.result;
-		Debug.Log (filenames.Length);
+        //CoroutineWithData objListRequest = new CoroutineWithData (this, RhinoRequestor.ObjFilePathListRequest (subjectName));
+        //yield return objListRequest.coroutine;
+        string[] filenames = RhinoRequestor.EditorObjFilePathListRequest(subjectName);//(string[])objListRequest.result;
+		//Debug.Log (filenames.Length);
 		foreach (string filename in filenames)
 		{
 			if (System.IO.Path.GetExtension (filename).Equals (".obj"))
 			{
 				//if (loadingText != null)
 				//	loadingText.text = "Downloading: " + filename;
-				yield return FileRequestToObj (subjectName, filename);
+                EditorFileRequestToObj (subjectName, filename);
 			}
 			else
 			{
@@ -195,4 +204,10 @@ public class ObjSpawner : Spawner
 		byte[] objData = (byte[])objRequest.result;
 		BuildBrainPiece(objData, fileName);
 	}
+
+    private void EditorFileRequestToObj(string subjectName, string fileName)
+    {
+        byte[] objData = RhinoRequestor.EditorFileRequest(subjectName, fileName);
+        BuildBrainPiece(objData, fileName);
+    }
 }

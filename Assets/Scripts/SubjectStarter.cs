@@ -5,25 +5,34 @@ using UnityEngine;
 public class SubjectStarter : MonoBehaviour
 {
 	public UnityEngine.UI.InputField subjectNameInput;
-	public Spawner[] spawners;
-	public Spawner[] averageBrainSpawners;
+	public Spawner[] spawners; //these will be spawned when regular subject are loaded
+	public Spawner[] averageBrainSpawners; //these will be spawned when average brain subject is loaded
 	public GameObject loadingMessage;
 	public GameObject inputUI;
 	public Colorizer colorizer;
 	public MonoBehaviour[] disableWhileLoading;
 	public UnityEngine.UI.Button goButton;
 
+    /// <summary>
+    /// called from the go button
+    /// </summary>
 	public void Go()
 	{
 		StartCoroutine (DoLoad());
 	}
 
+    /// <summary>
+    /// called from the use average brain button.  it simply sets the subject name to the average brain name and then clicks go
+    /// </summary>
 	public void GoAverageBrain()
 	{
 		subjectNameInput.text = "fsaverage_joel";
 		goButton.onClick.Invoke ();
 	}
 
+    /// <summary>
+    /// this loads a subject.  it will do some things differently if it's loading fsaverage_joel (the average brain)
+    /// </summary>
 	private IEnumerator DoLoad()
 	{
 		foreach (MonoBehaviour monoBehavior in disableWhileLoading)
@@ -57,6 +66,7 @@ public class SubjectStarter : MonoBehaviour
 
 		if (average_brain)
 		{
+            //spawn all spawners for the average brain
 			foreach (Spawner spawner in averageBrainSpawners)
 			{
 				spawner.gameObject.SetActive (true);
@@ -67,6 +77,7 @@ public class SubjectStarter : MonoBehaviour
 		}
 		else
 		{
+            //spawn all spawners for regular subjects
 			foreach (Spawner spawner in spawners)
 			{
 				spawner.gameObject.SetActive (true);

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Responsible for changing the color of the brain.
+/// </summary>
 public class Colorizer : MonoBehaviour
 {
 	public void Initialize()

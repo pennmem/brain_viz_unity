@@ -4,19 +4,10 @@ using UnityEngine;
 
 public class BrainPiece : BrainWorldMonobehavior
 {
-
-	// Use this for initialization
-	void Start ()
-	{
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		
-	}
-
+    /// <summary>
+    /// The info string data is all contained in the name of the game object (which was the name of the obj file this came from)
+    /// </summary>
+    /// <returns>The string.</returns>
 	public override string InfoString ()
 	{
 		string[] splitName = gameObject.name.Split ('.');

@@ -11,12 +11,18 @@ public class Spinner : MonoBehaviour
 
 	private Vector2 lastMousePos = Vector2.zero;
 
+    /// <summary>
+    /// Resets the brain to default rotation.
+    /// </summary>
     public void Reset()
     {
         gameObject.transform.rotation = Quaternion.identity;
         gameObject.transform.position = Vector3.zero;
     }
 
+    /// <summary>
+    /// Simply collects input to decide how to rotate the brain.
+    /// </summary>
     void Update ()
 	{
 		float ySpin = Input.GetAxis ("Horizontal") * keySpinFactor * Time.deltaTime;

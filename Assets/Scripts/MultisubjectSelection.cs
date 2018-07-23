@@ -11,6 +11,11 @@ public class MultisubjectSelection : Spawner
 	private SubjectSelector[] selectors;
 	private int last_clicked = 0;
 
+    /// <summary>
+    /// Performs the electrode spawning for each subject by calling ElectrodeSpawner.SpawnAllSubjects, and creates a clickable rectangle field for flipping electrodes on and off in the multisubject selection box.
+    /// </summary>
+    /// <param name="subjectName">Subject name.</param>
+    /// <param name="average_brain">If set to <c>true</c> average brain.</param>
 	public override IEnumerator Spawn(string subjectName, bool average_brain = false)
 	{
 		yield return electrodeSpawner.SpawnAllSubjects (average_brain);
@@ -35,13 +40,21 @@ public class MultisubjectSelection : Spawner
 		electrodeSpawner.ShowElectrodesBySubject (selectors[index].GetName(), select);
 	}
 
-    //called by SubjectSelectors
+    /// <summary>
+    /// called by SubjectSelectors (on a regular click)
+    /// </summary>
+    /// <param name="index">index of subject box</param>
+    /// <param name="select">whether to select or deselect</param>
 	public void SingleSelect(int index, bool select)
 	{
 		Select (index, select);
 		last_clicked = index;
 	}
 
+    /// <summary>
+    /// flip only one subject leaving the rest teh same (When "alt" is held some)
+    /// </summary>
+    /// <param name="index">Index.</param>
 	public void UniqueSelect(int index)
 	{
 		for (int i = 0; i < selectors.Length; i++)
@@ -56,6 +69,10 @@ public class MultisubjectSelection : Spawner
 		last_clicked = index;
 	}
 
+    /// <summary>
+    /// select a range of subject (when "shift" is held down)
+    /// </summary>
+    /// <param name="index">Index.</param>
 	public void RangeSelect(int index)
 	{
 		if (index >= last_clicked)

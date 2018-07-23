@@ -28,6 +28,11 @@ public class ElectrodeSpawner : Spawner
 		subjects_enabled = new Dictionary<string, bool> ();
 	}
 
+    /// <summary>
+    /// This spawns the electrodes for the subject.
+    /// </summary>
+    /// <param name="subjectName">Subject name.</param>
+    /// <param name="average_brain">If set to <c>true</c> average brain.</param>
 	public override IEnumerator Spawn(string subjectName, bool average_brain = false)
 	{
 		subjects_to_electrodes.Add (subjectName, new List<Electrode> ());
@@ -183,6 +188,11 @@ public class ElectrodeSpawner : Spawner
 		}
 	}
 
+    /// <summary>
+    /// These requests a lists of all subjects and spawns electrodes for each of them.
+    /// </summary>
+    /// <returns>The all subjects.</returns>
+    /// <param name="average_brain">If set to <c>true</c> average brain.</param>
 	public IEnumerator SpawnAllSubjects(bool average_brain)
 	{
 		CoroutineWithData subjectListRequest = new CoroutineWithData (this, RhinoRequestor.SubjectListRequest());
@@ -195,6 +205,11 @@ public class ElectrodeSpawner : Spawner
 		}
 	}
 
+    /// <summary>
+    /// Called from the UI, shows or hides a subject's electrodes.
+    /// </summary>
+    /// <param name="subject">Subject.</param>
+    /// <param name="show">If set to <c>true</c> show.</param>
 	public void ShowElectrodesBySubject(string subject, bool show)
 	{
 		foreach (Electrode electrode in subjects_to_electrodes [subject])

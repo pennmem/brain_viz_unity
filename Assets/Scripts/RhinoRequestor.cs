@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityExtension;
 
+/// <summary>
+/// this class contains coroutines for "asynchronous" execution of each needed rhino request.
+/// it also contains "editor" versions which are not coroutines (since there are no coroutines in the editor).  these are used for the asset bundle generation.
+/// </summary>
 public static class RhinoRequestor
 {
 	private static string RHINO_ADDRESS = "http://localhost:8000";//"http://rhino2.psych.upenn.edu:8083"; //
@@ -21,9 +25,6 @@ public static class RhinoRequestor
 		string baseUrl = currentUrl.Substring (0, currentUrl.Length - 6);
 		RHINO_ADDRESS = baseUrl;
 	}
-
-    //this class contains coroutines for "asynchronous" execution of each needed rhino request.
-    //it also contains "editor" versions which are not coroutines (since there are no coroutines in the editor).  these are used for the asset bundle generation.
 
 	public static IEnumerator ObjFilePathListRequest(string subjectName)
 	{

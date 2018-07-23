@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This is the script for the button for each subject in the multisubject selection box.
+/// </summary>
 public class SubjectSelector : MonoBehaviour
 {
 	public UnityEngine.UI.Image selectionIndicator;
