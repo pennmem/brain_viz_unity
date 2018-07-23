@@ -43,15 +43,16 @@ public class ObjSpawner : Spawner
 			hcpRightParent.SetActive(active);
 	}
 
+    //spawns the brain for one subject- this may be "fsaverage_joel", the average brain.
 	public override IEnumerator Spawn(string subject, bool average_brain = false)
 	{
 		CoroutineWithData subjectListRequest = new CoroutineWithData (this, RhinoRequestor.AssetBundleRequest(subject));
 		yield return subjectListRequest.coroutine;
+		Debug.Log (subjectListRequest.result);
 		if (subjectListRequest.result == null)
 		{
-			loadingText.text = "AssetBundle not found. Performign alternative (slower) load. Please wait.";
-			yield return null;
-			EditorSpawn (subject, average_brain);
+			loadingText.text = "AssetBundle not found. Performing alternative (slower) load. Please wait.";
+			yield return ObjSpawn (subject, average_brain);
 			yield break;
 		}
 		AssetBundle bundle = (AssetBundle)subjectListRequest.result;
@@ -67,6 +68,9 @@ public class ObjSpawner : Spawner
 
 		currentBundle = bundle;
 
+		//due to weirdness, flip everything
+		gameObject.transform.localScale = new Vector3 (-gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+
 		hcp.SetActive (false);
 	}
 
@@ -78,7 +82,9 @@ public class ObjSpawner : Spawner
 			currentBundle.Unload (true);
 	}
 
-	public void EditorSpawn(string subjectName, bool average_brain = false)
+    //this performs the load from Objs instead of an .assetBundle
+    //it is used in case no .assetBundle exists and by CreateAssetBundles to create the asset bundles in the first place.
+	public IEnumerator ObjSpawn(string subjectName, bool average_brain = false)
 	{
 		float startTime = Time.time;
 
@@ -97,15 +103,17 @@ public class ObjSpawner : Spawner
 		hcpRightParent = new GameObject ("hcp right");
 		hcpRightParent.transform.parent = hcp.transform;
 
-		string[] filenames = (string[])RhinoRequestor.EditorObjFilePathListRequest (subjectName);
+		CoroutineWithData objListRequest = new CoroutineWithData (this, RhinoRequestor.ObjFilePathListRequest (subjectName));
+		yield return objListRequest.coroutine;
+		string[] filenames = (string[])objListRequest.result;
 		Debug.Log (filenames.Length);
 		foreach (string filename in filenames)
 		{
 			if (System.IO.Path.GetExtension (filename).Equals (".obj"))
 			{
-				if (loadingText != null)
-					loadingText.text = "Downloading: " + filename;
-				FileRequestToObj (subjectName, filename);
+				//if (loadingText != null)
+				//	loadingText.text = "Downloading: " + filename;
+				yield return FileRequestToObj (subjectName, filename);
 			}
 			else
 			{
@@ -180,10 +188,11 @@ public class ObjSpawner : Spawner
 		return targetObject;
 	}
 
-	private void FileRequestToObj(string subjectName, string fileName)
+	private IEnumerator FileRequestToObj(string subjectName, string fileName)
 	{
-		byte[] objData = (byte[])RhinoRequestor.EditorFileRequest (subjectName, fileName);
-		//Debug.Log (fileName + ": " + objData.Length.ToString());
+		CoroutineWithData objRequest = new CoroutineWithData (this, RhinoRequestor.FileRequest (subjectName, fileName));
+		yield return objRequest.coroutine;
+		byte[] objData = (byte[])objRequest.result;
 		BuildBrainPiece(objData, fileName);
 	}
 }

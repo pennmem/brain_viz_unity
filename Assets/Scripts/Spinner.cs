@@ -11,7 +11,13 @@ public class Spinner : MonoBehaviour
 
 	private Vector2 lastMousePos = Vector2.zero;
 
-	void Update ()
+    public void Reset()
+    {
+        gameObject.transform.rotation = Quaternion.identity;
+        gameObject.transform.position = Vector3.zero;
+    }
+
+    void Update ()
 	{
 		float ySpin = Input.GetAxis ("Horizontal") * keySpinFactor * Time.deltaTime;
 		float xSpin = Input.GetAxis ("Vertical") * keySpinFactor * Time.deltaTime;

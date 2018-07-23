@@ -10,11 +10,24 @@ public class CreateAssetBundles : MonoBehaviour
 	{
 		ObjSpawner objSpawner = GameObject.FindObjectOfType<ObjSpawner>();
 
-		string[] subjects = new string[] { "fsaverage_joel" }; //RhinoRequestor.EditorSubjectListRequest();
+        //THE BRAINS YOU WANT TO DOWNLOAD
+        string[] subjects = new string[] { "R1409D",
+                                           "R1417T",
+                                           "R1420T",
+                                           "R1421M",
+                                           "R1422T",
+                                           "R1423E",
+                                           "R1425D",
+                                           "R1426N",
+                                           "R1427T",
+                                           "R1428T",
+                                           "R1431J",
+                                           "R1432N", }; //RhinoRequestor.EditorSubjectListRequest(); for all brains
+
 		foreach (string subject in subjects)
 		{
 			Debug.Log ("Spawning objs of: " + subject);
-			objSpawner.EditorSpawn (subject);
+			objSpawner.ObjSpawn (subject);
 		}
 	}
 

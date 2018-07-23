@@ -22,6 +22,9 @@ public static class RhinoRequestor
 		RHINO_ADDRESS = baseUrl;
 	}
 
+    //this class contains coroutines for "asynchronous" execution of each needed rhino request.
+    //it also contains "editor" versions which are not coroutines (since there are no coroutines in the editor).  these are used for the asset bundle generation.
+
 	public static IEnumerator ObjFilePathListRequest(string subjectName)
 	{
 		CheckRhinoAddress ();
@@ -90,16 +93,15 @@ public static class RhinoRequestor
 
 		string url_parameters = "?subject=" + subjectName + "&static_file=assetBundle";
 
-		var request = UnityEngine.Networking.UnityWebRequest.GetAssetBundle(RHINO_ADDRESS + FILE_REQUEST_ENDPOINT + url_parameters);
+		var request = UnityEngine.Networking.UnityWebRequestAssetBundle.GetAssetBundle(RHINO_ADDRESS + FILE_REQUEST_ENDPOINT + url_parameters);
 
 		request.SendWebRequest ();
-		//Debug.Log ("Sending request to: " + request.url);
+		Debug.Log ("Sent request to: " + request.url);
 		while (!request.downloadHandler.isDone)
 			yield return null;
-
 		yield return UnityEngine.Networking.DownloadHandlerAssetBundle.GetContent(request);
 	}
-
+		
 	public static string[] EditorObjFilePathListRequest(string subjectName)
 	{
 		CheckRhinoAddress ();

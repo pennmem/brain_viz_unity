@@ -5,8 +5,8 @@ using UnityEngine;
 public class MultisubjectSelection : Spawner
 {
 
-	public ElectrodeSpawner electrodeSpawner;
-	public GameObject subjectSelector;
+	public ElectrodeSpawner electrodeSpawner; //the electrode spawner which will spawn all subjects
+    public GameObject subjectSelector; //the UI element to spawn for each subject (i. e. little rectangle with "R1234E" in it that can change color when selected)
 
 	private SubjectSelector[] selectors;
 	private int last_clicked = 0;
@@ -35,6 +35,7 @@ public class MultisubjectSelection : Spawner
 		electrodeSpawner.ShowElectrodesBySubject (selectors[index].GetName(), select);
 	}
 
+    //called by SubjectSelectors
 	public void SingleSelect(int index, bool select)
 	{
 		Select (index, select);
