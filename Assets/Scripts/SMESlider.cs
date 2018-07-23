@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This script is on the SME slider.  It looks at the dropdowns for selecting stats and calls ShowElectrodeByStat on the electrode spawner accordingly.
+/// </summary>
 public class SMESlider : MonoBehaviour
 {
 	public UnityEngine.UI.Slider slider;

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Instantiates a popup prefab for when brain world objecs are clicked.
+/// </summary>
 public class PopupMaker : MonoBehaviour
 {
 	public GameObject popupInfoPrefab;

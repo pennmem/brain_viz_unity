@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Stim site spawner initializes this so that mousing over stim sites will produce nice info strings (see BrainWorldMonobehavior)
+/// </summary>
 public class StimSite : BrainWorldMonobehavior
 {
 	private string subject_id;

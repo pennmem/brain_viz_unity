@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The script that is on an individual electrode.  Used to toggle according to stats and also generate info strings.
+/// </summary>
 public class Electrode : BrainWorldMonobehavior
 {
 

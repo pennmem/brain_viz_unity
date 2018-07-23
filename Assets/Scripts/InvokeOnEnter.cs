@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Makes the enter key push the go button when typing in the subject input field
+/// </summary>
 public class InvokeOnEnter : MonoBehaviour
 {
 

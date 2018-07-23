@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityExtension;
 
+/// <summary>
+/// the spawner for pieces of the brain
+/// </summary>
 public class ObjSpawner : Spawner
 {
 	private GameObject dk;
@@ -74,7 +77,7 @@ public class ObjSpawner : Spawner
 		currentBundle = bundle;
 
 		//due to weirdness, flip everything
-		gameObject.transform.localScale = new Vector3 (-gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
+		//gameObject.transform.localScale = new Vector3 (-gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
 
 		hcp.SetActive (false);
 	}

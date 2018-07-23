@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Responsible for loading subjects.
+/// </summary>
 public class SubjectStarter : MonoBehaviour
 {
 	public UnityEngine.UI.InputField subjectNameInput;

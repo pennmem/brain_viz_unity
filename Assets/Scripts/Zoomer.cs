@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Zooms the camera is and out.  And moves the brain up and down.
+/// </summary>
 public class Zoomer : MonoBehaviour
 {
 	public float zoomFactor = 100;

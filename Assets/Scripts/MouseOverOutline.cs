@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// For brain world objects, toggles their outline graphical effect and makes a popup window when clicked.
+/// </summary>
 public class MouseOverOutline : MonoBehaviour
 {
 	public cakeslice.Outline outline;

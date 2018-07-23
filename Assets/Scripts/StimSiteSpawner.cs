@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
+/// <summary>
+/// The spawner for stim site spheres.
+/// </summary>
 public class StimSiteSpawner : Spawner
 {
 	public GameObject stimSiteIndicatorPrefab;
@@ -12,6 +13,12 @@ public class StimSiteSpawner : Spawner
 
 	private const float MAGNITUDE_CUTOFF = 100f;
 
+    /// <summary>
+    /// Uses a rhino request to get the file that contains prior stim site information.
+    /// </summary>
+    /// <returns>The spawn.</returns>
+    /// <param name="subjectName">Subject name.</param>
+    /// <param name="average_brain">If set to <c>true</c> average brain.</param>
 	public override IEnumerator Spawn(string subjectName, bool average_brain = false)
 	{
 		CoroutineWithData getStimSiteCSVReader = new CoroutineWithData (this, GetStimSiteCSVReader(subjectName));
@@ -63,6 +70,10 @@ public class StimSiteSpawner : Spawner
 		yield return new System.IO.StringReader(csvText);
 	}
 
+    /// <summary>
+    /// Called by the slider to show and hide stim sites.
+    /// </summary>
+    /// <param name="deltaRecallMinimum">Delta recall minimum.</param>
 	public void ShowStimSitesByDeltaRecall(float deltaRecallMinimum)
 	{
 		foreach (StimSite stimSite in stimSites)

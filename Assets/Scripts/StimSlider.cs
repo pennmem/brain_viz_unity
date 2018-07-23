@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// When the slider slides, call ShowStimSitesByDeltaRecall on the spawner for the stim sites (the script on the parent of the stime sites).
+/// </summary>
 public class StimSlider : MonoBehaviour
 {
 	public StimSiteSpawner stimSiteSpawner;
