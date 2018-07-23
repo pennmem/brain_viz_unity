@@ -8,6 +8,8 @@ public class CreateAssetBundles : MonoBehaviour
     //Step 1: Download Brains.  Do this in a scene with an objSpawner, and note that downloading all brains will take a while.  The editor is single threaded and will freeze while downloading- you can check progress by looking at requests on the server.
     //Step 2: Create prefabs of the brains you want to make asset bundles for.  Do this by selecting the downloaded brains in the scene first.
     //Step 3: Build prefabs into asset bundles.  This will automatically build all assets bundles.  Prefabs will already have been added to the correct asset bundle.  This is fast-ish.
+    //The resultant asset bundles should be uploaded to rhino.  They will then be served to the brain viz app upon request.  The web app expects asset bundles to be: data10/eeg/freesurfer/subjects/R????X/surf/roi/r????x
+    // (note the capital R and X in the subject directory, and lowercase r and x in the filename.  note the file has no extension.)
 
     //step 1
     [MenuItem("Assets/DownloadBrains")]
@@ -17,7 +19,7 @@ public class CreateAssetBundles : MonoBehaviour
         ObjSpawner objSpawner = FindObjectOfType<ObjSpawner>();
 
         //THE BRAINS YOU WANT TO DOWNLOAD
-        string[] subjects = RhinoRequestor.EditorSubjectListRequest(); //for all brains, can also be picked individually by making this some other array of strings.
+        string[] subjects = new string[] { "R1420T" }; //RhinoRequestor.EditorSubjectListRequest(); //for all brains, can also be picked individually by making this some other array of strings.
 
 		foreach (string subject in subjects)
 		{
