@@ -3,8 +3,8 @@ This is a Unity project which uses html requests to our web app to provide a gra
 
 # To deploy the app
 The project is intended to be built for WebGL and placed within our web app.  The web app then serves up the brain vizualization app on its /brain/ page.  To deploy the project:
-1. Use the unity editor to build to WebGL.
-2. Find the folder which Unity generates, and within that folder, the subfolder called "Build."
+1. Use the unity editor to build to WebGL.  (File menu -> Build Settings -> Make sure that "brain" scene is checked under "Scenes in build" and that WebGL is selected under platform -> click "Build" -> select an output location.)
+2. Find the folder which Unity generates in the selected output location, and within that folder, the subfolder called "Build."
 3. Update the cml web project to include your new build by replacing the cml-web/static/brain/unity_web_app/Build folder.  Note you will need to update the web app on rhino using tmux on the ram_maint account before your change is reflected on the actual running web app.
 (Optionally also replace TemplateData and logo.png, which are used for css styling of the page the web app is on.)
 
